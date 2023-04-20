@@ -3,7 +3,7 @@ from customtkinter import *
 import time
 from tkinter import ttk
 
-
+input_test = ""
 current_dato = time.localtime()
 monthly_profit = 0
 monthly_losses = 0
@@ -427,11 +427,28 @@ def remove_customer_from_drop_down_customer_losses():
 
 
 def window_settings():
+    def get_info_input_test():
+        my_new_label = input_test.get()
+        test_label = CTkLabel(first_frame, text=f"{my_new_label}", font=main_font)
+        test_label.grid(row=2, column=0)
+
+    global input_test
     settings_window = CTk()
     settings_window.geometry("640x366+400+280")
     settings_window.title("Velušovské vajíčko 1.0")
     settings_window.iconbitmap("icon.ico")
     settings_window.resizable(False, False)
+    first_frame = CTkFrame(settings_window, fg_color="transparent")
+    first_frame.pack()
+    # Quit file
+    btn_quit_file = CTkButton(first_frame, text="Zavrieť súbor", width=140, font=input_font,
+                              fg_color=button_color, border_width=3, command=get_info_input_test)
+    btn_quit_file.grid(row=0, column=0)
+    # input
+    input_test = CTkEntry(first_frame, width=185, font=input_font, border_width=3,
+                          text_color=temporary_input_font_color)
+    input_test.grid(row=0, column=1)
+
     settings_window.mainloop()
 
 
@@ -463,8 +480,9 @@ head_frame.pack(padx=(100, 0), pady=(10, 20))
 second_frame = CTkFrame(window, fg_color="transparent")
 second_frame.pack()
 
-input_frame = CTkFrame(window, fg_color="transparent")
-input_frame.pack()
+# SETTTINGS WINDOW FRAME
+settings_frame = CTkFrame(window, fg_color="transparent")
+settings_frame.pack()
 
 customer_losses_frame = CTkFrame(window, fg_color="transparent")
 customer_losses_frame.pack(pady=(20, 0))
@@ -480,6 +498,7 @@ buttons_frame_table.pack()
 
 bottom_frame = CTkFrame(window, fg_color="transparent")
 bottom_frame.pack()
+
 
 # ===============
 # MY CODE:
@@ -530,21 +549,23 @@ button_confirm_choose_file = CTkButton(second_frame, text="Vybrať", width=140, 
                                        fg_color=button_color, border_width=3, command=open_choosed_file)
 button_confirm_choose_file.grid(row=0, column=2, padx=(10, 0))
 
-# INPUT FRAME
+# ============SETTINGS FRAME=========
 # Customer/New Item
-drop_down_customer_or_new_item = CTkOptionMenu(input_frame, values=["Nová položka", "Nový zákazník"],
+drop_down_customer_or_new_item = CTkOptionMenu(settings_frame, values=["Nová položka", "Nový zákazník"],
                                                fg_color=button_color, button_color="#3d345f")
 drop_down_customer_or_new_item.grid(row=0, column=0)
 
 # Item input
-input_item = CTkEntry(input_frame, width=185, font=input_font, border_width=3, text_color=temporary_input_font_color)
+input_item = CTkEntry(settings_frame, width=185, font=input_font, border_width=3, text_color=temporary_input_font_color)
 input_item.insert(0, "Zadaj položku/zákazníka")
 input_item.grid(row=0, column=1, padx=8)
 
 # Button Add item
-button_add_option = CTkButton(input_frame, text="Pridaj", width=100, font=input_font, fg_color=button_color,
+button_add_option = CTkButton(settings_frame, text="Pridaj", width=100, font=input_font, fg_color=button_color,
                               border_width=3, command=add_new_option_to_drop_down_table_items_or_new_customer)
 button_add_option.grid(row=0, column=2, padx=(0, 764))
+
+# ============SETTINGS FRAME - END=========
 
 # CUSTOMER/LOSSES FRAME
 # Customer/Losses
