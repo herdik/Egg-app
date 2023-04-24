@@ -586,7 +586,11 @@ button_confirm_choose_file.grid(row=0, column=2, padx=(10, 0))
 # Customer/Losses
 drop_down_customer_losses = CTkOptionMenu(customer_losses_frame, values=all_options_to_drop_down_customer_or_new_item(),
                                           fg_color=button_color, button_color="#3d345f")
-drop_down_customer_losses.grid(row=0, column=0, padx=(0, 776))
+drop_down_customer_losses.grid(row=0, column=0)
+
+# Label for # Customer/Losses
+customer_or_losses_label = CTkLabel(customer_losses_frame, width=100, text="Zákazník / Výdavok", font=bottom_label_font)
+customer_or_losses_label.grid(row=0, column=1, padx=(10, 776))
 
 # CUSTOMER/LOSSES FRAME - END
 
