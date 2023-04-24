@@ -311,8 +311,9 @@ def open_choosed_file():
 def save_file_and_update_profit_and_losses():
     save_file_fun()
     check_all_existing_files()
-    monthly_profit_label_value.configure(text=f"{update_monthly_profit_losses()[0]}")
-    monthly_losses_label_value.configure(text=f"{update_monthly_profit_losses()[1]}")
+    open_choosed_file()
+    # monthly_profit_label_value.configure(text=f"{update_monthly_profit_losses()[0]}")
+    # monthly_losses_label_value.configure(text=f"{update_monthly_profit_losses()[1]}")
 
 
 def all_options_to_drop_down_table_items():
