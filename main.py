@@ -61,12 +61,6 @@ def current_date_numbers_for_input_date():
     return current_day
 
 
-# funckie pre vymazanie textu po kliknutí
-def click_input_item_fun(e):
-    input_item.delete(0, END)
-    input_item.configure(text_color=text_color_input)
-
-
 def clicked_input_price_fun(e):
     input_price.delete(0, END)
     input_price.configure(text_color=text_color_input)
@@ -335,26 +329,6 @@ def all_options_to_drop_down_customer_or_new_item():
     return customers_options
 
 
-def add_new_option_to_drop_down_table_items_or_new_customer():
-    new = input_item.get().capitalize()
-    if drop_down_customer_or_new_item.get() == "Nová položka":
-        items_options.append(new)
-        drop_down_table_items.configure(values=items_options)
-        with open("moje_položky.txt", mode="w") as file:
-            for one_item in items_options:
-                file.write(one_item + str("\n"))
-    else:
-        customers_options.append(new)
-        drop_down_customer_losses.configure(values=customers_options)
-        with open("zákazníci.txt", mode="w") as file:
-            for one_item in customers_options:
-                file.write(one_item + str("\n"))
-    input_item.delete(0, END)
-    input_item.insert(0, "Zadaj položku/zákazníka")
-    input_item.configure(text_color=temporary_input_font_color)
-    current_month_label.focus()
-
-
 def sort_out_table_by_date():
     checking_table = []
     my_items = table.get_children()
@@ -408,48 +382,110 @@ def update_monthly_profit_losses():
     return plus_values, minus_values
 
 
-def remove_item_from_drop_down_table_items():
-    items_options.remove(drop_down_table_items.get())
-    drop_down_table_items.configure(values=items_options)
-    drop_down_table_items.set(items_options[0])
-    with open("moje_položky.txt", mode="w") as file:
-        for i in range(len(items_options)):
-            file.write(items_options[i] + str("\n"))
-
-
-def remove_customer_from_drop_down_customer_losses():
-    customers_options.remove(drop_down_customer_losses.get())
-    drop_down_customer_losses.configure(values=customers_options)
-    drop_down_customer_losses.set(customers_options[0])
-    with open("zákazníci.txt", mode="w") as file:
-        for i in range(len(customers_options)):
-            file.write(customers_options[i] + str("\n"))
-
-
 def window_settings():
-    def get_info_input_test():
-        my_new_label = input_test.get()
-        test_label = CTkLabel(first_frame, text=f"{my_new_label}", font=main_font)
-        test_label.grid(row=2, column=0)
+    # funckie pre vymazanie textu po kliknutí
+    def click_input_item_fun(e):
+        input_item.delete(0, END)
+        input_item.configure(text_color=text_color_input)
 
-    global input_test
-    settings_window = CTk()
+    def add_new_option_to_drop_down_table_items_or_new_customer():
+        new = input_item.get().capitalize()
+        if drop_down_customer_or_new_item.get() == "Nová položka":
+            items_options.append(new)
+            drop_down_table_items_2.configure(values=items_options)
+            with open("moje_položky.txt", mode="w") as file:
+                for one_item in items_options:
+                    file.write(one_item + str("\n"))
+        else:
+            customers_options.append(new)
+            drop_down_customer_losses_2.configure(values=customers_options)
+            with open("zákazníci.txt", mode="w") as file:
+                for one_item in customers_options:
+                    file.write(one_item + str("\n"))
+        input_item.delete(0, END)
+        input_item.insert(0, "Zadaj položku/zákazníka")
+        input_item.configure(text_color=temporary_input_font_color)
+        settings_window.focus()
+
+    def remove_customer_from_drop_down_customer_losses():
+        customers_options.remove(drop_down_customer_losses_2.get())
+        drop_down_customer_losses_2.configure(values=customers_options)
+        drop_down_customer_losses_2.set(customers_options[0])
+        with open("zákazníci.txt", mode="w") as file:
+            for i in range(len(customers_options)):
+                file.write(customers_options[i] + str("\n"))
+
+    def remove_item_from_drop_down_table_items():
+        items_options.remove(drop_down_table_items_2.get())
+        drop_down_table_items_2.configure(values=items_options)
+        drop_down_table_items_2.set(items_options[0])
+        with open("moje_položky.txt", mode="w") as file:
+            for i in range(len(items_options)):
+                file.write(items_options[i] + str("\n"))
+
+    def update_customers_options():
+        drop_down_customer_losses.configure(values=customers_options)
+        drop_down_table_items.configure(values=items_options)
+
+    settings_window = CTkToplevel()
     settings_window.geometry("640x366+400+280")
     settings_window.title("Velušovské vajíčko 1.0")
     settings_window.iconbitmap("icon.ico")
     settings_window.resizable(False, False)
-    first_frame = CTkFrame(settings_window, fg_color="transparent")
-    first_frame.pack()
-    # Quit file
-    btn_quit_file = CTkButton(first_frame, text="Zavrieť súbor", width=140, font=input_font,
-                              fg_color=button_color, border_width=3, command=get_info_input_test)
-    btn_quit_file.grid(row=0, column=0)
-    # input
-    input_test = CTkEntry(first_frame, width=185, font=input_font, border_width=3,
-                          text_color=temporary_input_font_color)
-    input_test.grid(row=0, column=1)
+    settings_window.grab_set()
+    first_toplevel_frame = CTkFrame(settings_window, fg_color="transparent")
+    first_toplevel_frame.pack()
+    second_toplevel_frame = CTkFrame(settings_window, fg_color="transparent")
+    second_toplevel_frame.pack()
+    # Customer/New Item
+    drop_down_customer_or_new_item = CTkOptionMenu(first_toplevel_frame, values=["Nová položka", "Nový zákazník"],
+                                                   fg_color=button_color, button_color="#3d345f")
+    drop_down_customer_or_new_item.grid(row=0, column=0)
 
-    settings_window.mainloop()
+    # Item input
+    input_item = CTkEntry(first_toplevel_frame, width=185, font=input_font, border_width=3,
+                          text_color=temporary_input_font_color)
+    input_item.insert(0, "Zadaj položku/zákazníka")
+    input_item.grid(row=0, column=1, padx=10)
+
+    # Button Add item
+    button_add_option = CTkButton(first_toplevel_frame, text="Pridaj", width=100, font=input_font,
+                                  fg_color=button_color,
+                                  border_width=3, command=add_new_option_to_drop_down_table_items_or_new_customer)
+    button_add_option.grid(row=0, column=2)
+
+    # Bind the Entry widget with Mouse Button to clear the content
+    clicked_input_item = input_item.bind("<FocusIn>", click_input_item_fun)
+
+    # Customer/Losses Options Menu
+    drop_down_customer_losses_2 = CTkOptionMenu(first_toplevel_frame,
+                                                values=customers_options,
+                                                fg_color=button_color, button_color="#3d345f")
+    drop_down_customer_losses_2.grid(row=1, column=0)
+
+    # Delete button for OptionMenu customer_losses options
+    delete_button_selected_option = CTkButton(first_toplevel_frame, width=100, text="Odstrániť zákazníka",
+                                              font=input_font,
+                                              fg_color=button_color, border_width=3,
+                                              command=remove_customer_from_drop_down_customer_losses)
+    delete_button_selected_option.grid(row=1, column=1)
+
+    # Items Options Menu
+    drop_down_table_items_2 = CTkOptionMenu(first_toplevel_frame, values=items_options,
+                                            fg_color=button_color,
+                                            button_color="#3d345f")
+    drop_down_table_items_2.grid(row=2, column=0)
+
+    # Delete button for OptionMenu items options
+    delete_button_selected_option = CTkButton(first_toplevel_frame, width=100, text="Odstrániť zákazníka",
+                                              font=input_font,
+                                              fg_color=button_color, border_width=3,
+                                              command=remove_item_from_drop_down_table_items)
+    delete_button_selected_option.grid(row=2, column=1)
+
+    save_settings = CTkButton(second_toplevel_frame, text="Pridaj", width=100, font=input_font, fg_color=button_color,
+                              border_width=3, command=update_customers_options)
+    save_settings.grid(row=0, column=0, pady=(80, 10))
 
 
 window = CTk()
@@ -479,10 +515,6 @@ head_frame.pack(padx=(100, 0), pady=(10, 20))
 
 second_frame = CTkFrame(window, fg_color="transparent")
 second_frame.pack()
-
-# SETTTINGS WINDOW FRAME
-settings_frame = CTkFrame(window, fg_color="transparent")
-settings_frame.pack()
 
 customer_losses_frame = CTkFrame(window, fg_color="transparent")
 customer_losses_frame.pack(pady=(20, 0))
@@ -549,35 +581,13 @@ button_confirm_choose_file = CTkButton(second_frame, text="Vybrať", width=140, 
                                        fg_color=button_color, border_width=3, command=open_choosed_file)
 button_confirm_choose_file.grid(row=0, column=2, padx=(10, 0))
 
-# ============SETTINGS FRAME=========
-# Customer/New Item
-drop_down_customer_or_new_item = CTkOptionMenu(settings_frame, values=["Nová položka", "Nový zákazník"],
-                                               fg_color=button_color, button_color="#3d345f")
-drop_down_customer_or_new_item.grid(row=0, column=0)
-
-# Item input
-input_item = CTkEntry(settings_frame, width=185, font=input_font, border_width=3, text_color=temporary_input_font_color)
-input_item.insert(0, "Zadaj položku/zákazníka")
-input_item.grid(row=0, column=1, padx=8)
-
-# Button Add item
-button_add_option = CTkButton(settings_frame, text="Pridaj", width=100, font=input_font, fg_color=button_color,
-                              border_width=3, command=add_new_option_to_drop_down_table_items_or_new_customer)
-button_add_option.grid(row=0, column=2, padx=(0, 764))
-
-# ============SETTINGS FRAME - END=========
 
 # CUSTOMER/LOSSES FRAME
 # Customer/Losses
 drop_down_customer_losses = CTkOptionMenu(customer_losses_frame, values=all_options_to_drop_down_customer_or_new_item(),
                                           fg_color=button_color, button_color="#3d345f")
-drop_down_customer_losses.grid(row=0, column=0)
+drop_down_customer_losses.grid(row=0, column=0, padx=(0, 776))
 
-# Delete button for OptionMenu drop_down_customer_losses
-delete_button_selected_option = CTkButton(customer_losses_frame, width=100, text="Odstrániť zákazníka", font=input_font,
-                                          fg_color=button_color, border_width=3,
-                                          command=remove_customer_from_drop_down_customer_losses)
-delete_button_selected_option.grid(row=0, column=1, padx=(10, 776))
 # CUSTOMER/LOSSES FRAME - END
 
 # TABLE ITEMS FRAME
@@ -605,7 +615,7 @@ button_add_item.grid(row=0, column=3, padx=(10, 750))
 # TABLE ITEMS FRAME - END
 
 # Bind the Entry widget with Mouse Button to clear the content
-clicked_input_item = input_item.bind("<FocusIn>", click_input_item_fun)
+
 clicked_input_price = input_price.bind("<FocusIn>", clicked_input_price_fun)
 
 # TABLE treeview
