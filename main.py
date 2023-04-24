@@ -76,7 +76,7 @@ def add_items_press_button_add_item():
     # table.tag_configure("oddrow", background="#333")
     # table.tag_configure("evenrow", background="#4d4d4d")
     # *******
-    count = len(table.get_children())
+
     if float(table_price) < 0:
         table.insert(parent="", index=END, iid=f"{id_item}", text="", values=(f"{table_date}", f"{table_item}",
                                                                               f"{table_price}"), tags=("minus", ))
@@ -253,7 +253,6 @@ def open_choosed_file():
     except:
         print("Súbor sa nenašiel")
 
-    existing_file_in_year = []
     line_values = []
     prices = []
     yearly_profit = 0
