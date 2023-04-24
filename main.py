@@ -393,15 +393,15 @@ def window_settings():
         if drop_down_customer_or_new_item.get() == "Nová položka":
             items_options.append(new)
             drop_down_table_items_2.configure(values=items_options)
-            with open("moje_položky.txt", mode="w") as file:
-                for one_item in items_options:
-                    file.write(one_item + str("\n"))
+            # with open("moje_položky.txt", mode="w") as file:
+            #     for one_item in items_options:
+            #         file.write(one_item + str("\n"))
         else:
             customers_options.append(new)
             drop_down_customer_losses_2.configure(values=customers_options)
-            with open("zákazníci.txt", mode="w") as file:
-                for one_item in customers_options:
-                    file.write(one_item + str("\n"))
+            # with open("zákazníci.txt", mode="w") as file:
+            #     for one_item in customers_options:
+            #         file.write(one_item + str("\n"))
         input_item.delete(0, END)
         input_item.insert(0, "Zadaj položku/zákazníka")
         input_item.configure(text_color=temporary_input_font_color)
@@ -411,19 +411,19 @@ def window_settings():
         customers_options.remove(drop_down_customer_losses_2.get())
         drop_down_customer_losses_2.configure(values=customers_options)
         drop_down_customer_losses_2.set(customers_options[0])
-        with open("zákazníci.txt", mode="w") as file:
-            for i in range(len(customers_options)):
-                file.write(customers_options[i] + str("\n"))
 
     def remove_item_from_drop_down_table_items():
         items_options.remove(drop_down_table_items_2.get())
         drop_down_table_items_2.configure(values=items_options)
         drop_down_table_items_2.set(items_options[0])
-        with open("moje_položky.txt", mode="w") as file:
-            for i in range(len(items_options)):
-                file.write(items_options[i] + str("\n"))
 
     def update_customers_options():
+        with open("moje_položky.txt", mode="w") as file:
+            for one_item in items_options:
+                file.write(one_item + str("\n"))
+        with open("zákazníci.txt", mode="w") as file:
+            for one_item in customers_options:
+                file.write(one_item + str("\n"))
         drop_down_customer_losses.configure(values=customers_options)
         drop_down_table_items.configure(values=items_options)
 
