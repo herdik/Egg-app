@@ -455,7 +455,7 @@ def window_settings():
     button_add_option.grid(row=0, column=2)
 
     # Bind the Entry widget with Mouse Button to clear the content
-    clicked_input_item = input_item.bind("<FocusIn>", click_input_item_fun)
+    input_item.bind("<FocusIn>", click_input_item_fun)
 
     # Customer/Losses Options Menu
     drop_down_customer_losses_2 = CTkOptionMenu(first_toplevel_frame,
@@ -597,7 +597,7 @@ customer_or_losses_label.grid(row=0, column=1, padx=(10, 776))
 
 # TABLE ITEMS FRAME
 # Date input
-input_date = CTkEntry(table_items_frame, width=80, font=input_font, border_width=3)
+input_date = CTkEntry(table_items_frame, width=87, font=input_font, border_width=3)
 input_date.insert(0, current_date_numbers_for_input_date())
 input_date.grid(row=0, column=0)
 
