@@ -388,6 +388,7 @@ def window_settings():
         input_item.delete(0, END)
         input_item.configure(text_color=text_color_input)
 
+    # pridanie položky aleno zákazníka do Options menu
     def add_new_option_to_drop_down_table_items_or_new_customer():
         new = input_item.get().capitalize()
         if drop_down_customer_or_new_item.get() == "Nová položka":
@@ -403,16 +404,19 @@ def window_settings():
         input_item.configure(text_color=temporary_input_font_color)
         settings_window.focus()
 
+    # Odobratie zákazníka z Options menu
     def remove_customer_from_drop_down_customer_losses():
         customers_options.remove(drop_down_customer_losses_2.get())
         drop_down_customer_losses_2.configure(values=customers_options)
         drop_down_customer_losses_2.set(customers_options[0])
 
+    # Odobratie položky z Options menu
     def remove_item_from_drop_down_table_items():
         items_options.remove(drop_down_table_items_2.get())
         drop_down_table_items_2.configure(values=items_options)
         drop_down_table_items_2.set(items_options[0])
 
+    # Uloženie možností z Options menu do súboru a transfer dát do main okna
     def update_customers_options():
         with open("moje_položky.txt", mode="w") as file:
             for one_item in items_options:
@@ -430,7 +434,7 @@ def window_settings():
     settings_window.resizable(False, False)
     settings_window.grab_set()
     first_toplevel_frame = CTkFrame(settings_window, fg_color="transparent")
-    first_toplevel_frame.pack()
+    first_toplevel_frame.pack(pady=30)
     second_toplevel_frame = CTkFrame(settings_window, fg_color="transparent")
     second_toplevel_frame.pack()
     # Customer/New Item
@@ -457,7 +461,7 @@ def window_settings():
     drop_down_customer_losses_2 = CTkOptionMenu(first_toplevel_frame,
                                                 values=customers_options,
                                                 fg_color=button_color, button_color="#3d345f")
-    drop_down_customer_losses_2.grid(row=1, column=0)
+    drop_down_customer_losses_2.grid(row=1, column=0, pady=20)
 
     # Delete button for OptionMenu customer_losses options
     delete_button_selected_option = CTkButton(first_toplevel_frame, width=150, text="Odstrániť zákazníka",
@@ -479,6 +483,7 @@ def window_settings():
                                               command=remove_item_from_drop_down_table_items)
     delete_button_selected_option.grid(row=2, column=1)
 
+    # Save settings button
     save_settings = CTkButton(second_toplevel_frame, text="Uložiť nastavenia", width=100, height=50, font=input_font,
                               fg_color=button_color,
                               border_width=3, command=update_customers_options)
