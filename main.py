@@ -464,7 +464,7 @@ def window_settings():
     drop_down_customer_losses_2.grid(row=1, column=0)
 
     # Delete button for OptionMenu customer_losses options
-    delete_button_selected_option = CTkButton(first_toplevel_frame, width=100, text="Odstrániť zákazníka",
+    delete_button_selected_option = CTkButton(first_toplevel_frame, width=150, text="Odstrániť zákazníka",
                                               font=input_font,
                                               fg_color=button_color, border_width=3,
                                               command=remove_customer_from_drop_down_customer_losses)
@@ -477,13 +477,14 @@ def window_settings():
     drop_down_table_items_2.grid(row=2, column=0)
 
     # Delete button for OptionMenu items options
-    delete_button_selected_option = CTkButton(first_toplevel_frame, width=100, text="Odstrániť zákazníka",
+    delete_button_selected_option = CTkButton(first_toplevel_frame, width=150, text="Odstrániť položku",
                                               font=input_font,
                                               fg_color=button_color, border_width=3,
                                               command=remove_item_from_drop_down_table_items)
     delete_button_selected_option.grid(row=2, column=1)
 
-    save_settings = CTkButton(second_toplevel_frame, text="Pridaj", width=100, font=input_font, fg_color=button_color,
+    save_settings = CTkButton(second_toplevel_frame, text="Uložiť nastavenia", width=100, height=50, font=input_font,
+                              fg_color=button_color,
                               border_width=3, command=update_customers_options)
     save_settings.grid(row=0, column=0, pady=(80, 10))
 
