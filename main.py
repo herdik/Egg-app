@@ -687,14 +687,13 @@ my_explode = [0.1, 0]
 
 fig = Figure()
 ax = fig.add_subplot(111)
-ax.pie(year_annual_turnover, radius=1, labels=my_labels, colors=my_colors, explode=my_explode, shadow=True)
-ax.legend(title="Celkový ročný obrat", loc='center left', bbox_to_anchor=(0.5, 1.02))
+ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode, shadow=True)
+ax.legend(title="Celkový ročný obrat", loc='center left', bbox_to_anchor=(0.7, 1.02))
 
 canvas = FigureCanvasTkAgg(fig, graphics_frame)
 canvas.get_tk_widget().grid(row=0, column=2)
 
 # ====== Graphics Frame END =======
-
 # Buttons for table
 # Remove item
 button_remove_item_line = CTkButton(buttons_frame_table, text="Odstrániť položku", width=140, font=input_font,
