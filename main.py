@@ -493,6 +493,24 @@ def window_settings():
     save_settings.grid(row=0, column=0, pady=(80, 10))
 
 
+def plot():
+    profit = 69
+    losses = 32
+
+    year_annual_turnover = ([profit, losses])
+    my_labels = [f"Príjmy {profit}", f"Výdavky {losses}"]
+    my_colors = ["#218727", "#d00"]
+
+    plt.pie(year_annual_turnover, labels=my_labels, colors=my_colors)
+    plt.legend(title="Celkový ročný obrat", loc='center left', bbox_to_anchor=(0.5, 1.02))
+    plt.show()
+    canvas.draw()
+    # x = np.random.randint(0, 10, 10)
+    # y = np.random.randint(0, 10, 10)
+    # ax.scatter(x, y)
+    # canvas.draw()
+
+
 window = CTk()
 window.geometry("1280x732+100+100")
 window.title("Velušovské vajíčko 1.0 - nastavenia")
@@ -748,5 +766,6 @@ reopen_saved_file()
 # new_month_new_year_annual_turnover()
 # check_all_existing_files()
 # update_monthly_profit_losses()
+plot()
 
 window.mainloop()
