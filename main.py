@@ -2,6 +2,9 @@ from tkinter import *
 from customtkinter import *
 import time
 from tkinter import ttk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
 
 input_test = ""
 current_dato = time.localtime()
@@ -525,7 +528,8 @@ table_items_frame = CTkFrame(window, fg_color="transparent")
 table_items_frame.pack(pady=20)
 
 graphics_frame = CTkFrame(window, fg_color="transparent")
-graphics_frame.pack(pady=(0, 20))
+graphics_frame.pack()
+# graphics_frame.pack(pady=(0, 20))
 
 buttons_frame_table = CTkFrame(window, fg_color="transparent")
 buttons_frame_table.pack()
@@ -624,6 +628,7 @@ button_add_item.grid(row=0, column=3, padx=(10, 750))
 
 clicked_input_price = input_price.bind("<FocusIn>", clicked_input_price_fun)
 
+# ====== Graphics Frame =======
 # TABLE treeview
 
 # Table style
@@ -668,8 +673,15 @@ table.grid(row=0, column=0)
 
 # Scrollbar
 scrollbar_table = CTkScrollbar(graphics_frame, command=table.yview)
-scrollbar_table.grid(row=0, column=1, padx=(0, 740), sticky=N+S)
+scrollbar_table.grid(row=0, column=1, padx=(0, 10), sticky=N+S)
 table.configure(yscrollcommand=scrollbar_table.set)
+
+fig, ax = plt.subplots()
+
+canvas = FigureCanvasTkAgg(fig, master=graphics_frame)
+canvas.get_tk_widget().grid(row=0, column=2)
+
+# ====== Graphics Frame END =======
 
 # Buttons for table
 # Remove item
