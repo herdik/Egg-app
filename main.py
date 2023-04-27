@@ -529,8 +529,7 @@ table_items_frame = CTkFrame(window, fg_color="transparent")
 table_items_frame.pack(pady=20)
 
 graphics_frame = CTkFrame(window, fg_color="transparent")
-graphics_frame.pack()
-# graphics_frame.pack(pady=(0, 20))
+graphics_frame.pack(pady=(0, 20))
 
 buttons_frame_table = CTkFrame(window, fg_color="transparent")
 buttons_frame_table.pack()
@@ -677,22 +676,25 @@ scrollbar_table = CTkScrollbar(graphics_frame, command=table.yview)
 scrollbar_table.grid(row=0, column=1, padx=(0, 10), sticky=N+S)
 table.configure(yscrollcommand=scrollbar_table.set)
 
-profit = 69
-losses = 32
+profit = 106
+losses = 100
 
 year_annual_turnover = np.array([profit, losses])
-my_labels = [f"Príjmy {profit}", f"Výdavky {losses}"]
+my_labels = [f"Príjmy {profit}", f"Výdavky -{losses}"]
 my_colors = ["#218727", "#d00"]
 my_explode = [0.1, 0]
 
 fig = Figure()
-fig.set_size_inches(6, 4)
+fig.set_size_inches(4, 2.75)
+fig.subplots_adjust(right=0.6)
 ax = fig.add_subplot(111)
-ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode, shadow=True)
-ax.legend(title="Celkový ročný obrat", loc='center left', bbox_to_anchor=(0.7, 1.02))
+ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode, shadow=True,
+       textprops={'fontsize': 9})
+ax.legend(title="Celkový ročný obrat", loc="center left", bbox_to_anchor=(1.07, 1.02), prop={"size": 8.5},
+          title_fontsize=9)
 
 canvas = FigureCanvasTkAgg(fig, graphics_frame)
-canvas.get_tk_widget().grid(row=0, column=2)
+canvas.get_tk_widget().grid(row=0, column=2, padx=(15, 305))
 
 # ====== Graphics Frame END =======
 # Buttons for table
