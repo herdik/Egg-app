@@ -1,6 +1,6 @@
-1.4.2023
-Vajíèka-Gabika Daòová
-4
+2.4.2023
+Vajíèka-Stankoví
+1
 5.4.2023
 Vajíèka-Stankoví
 5
@@ -10,14 +10,14 @@ Repa
 11.4.2023
 Vajíèka
 25
+13.4.2023
+Vápno-Vıdavok
+20
 15.4.2023
 Úhyn
 -12
 16.4.2023
 Zemiaky-krmné
-12
-16.4.2023
-Vajíèka-Stankoví
 12
 16.4.2023
 Zmeska-Vıdavok
@@ -31,6 +31,6 @@ Vajíèka-Stankoví
 17.4.2023
 Vajíèka-Stankoví
 2.5
-17.4.2023
-Mäso na polievku-Mikulášoví
-12
+29.4.2023
+Úhyn-Vıdavok
+-2

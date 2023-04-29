@@ -83,15 +83,12 @@ def add_items_press_button_add_item():
     # table.tag_configure("evenrow", background="#4d4d4d")
     # *******
 
-    if float(table_price) < 0:
+    if drop_down_customer_losses.get() == "Výdavok":
         table.insert(parent="", index=END, iid=f"{id_item}", text="", values=(f"{table_date}", f"{table_item}",
-                                                                              f"{table_price}"), tags=("minus", ))
-    elif float(table_price) > 0:
+                                                                              f"-{table_price}"), tags=("minus",))
+    else:
         table.insert(parent="", index=END, iid=f"{id_item}", text="", values=(f"{table_date}", f"{table_item}",
                                                                               f"{table_price}"), tags=("plus",))
-    else:
-        pass
-
     input_price.delete(0, END)
     # input_item.insert(0, "Zadaj názov položky")
     # input_item.configure(text_color=temporary_input_font_color)
