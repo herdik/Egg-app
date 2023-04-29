@@ -801,8 +801,8 @@ monthly_losses_label_value.grid(row=1, column=1, padx=(10, 760), ipadx=10)
 
 
 # reopen saved file
-reopen_saved_file()
-# open_choosed_file()
+# reopen_saved_file()
+open_choosed_file()
 # calculate profit form table
 # calculate losses from table
 
