@@ -362,6 +362,7 @@ def sort_out_table_by_date():
     my_items = table.get_children()
     for one_item in my_items:
         first_item = str(table.item(one_item)["values"][0])
+        first_item = change_date_or_add_zero_to_date(first_item)
         second_item = str(table.item(one_item)["values"][1])
         third_item = str(table.item(one_item)["values"][2])
         checking_table.append((first_item, second_item, third_item))
@@ -529,6 +530,17 @@ def window_settings():
 #            textprops={'fontsize': 9})
 #     ax.legend(title="Celkový ročný obrat", loc="center left", bbox_to_anchor=(1.07, 1.02), prop={"size": 8.5},
 #               title_fontsize=9)
+
+
+def change_date_or_add_zero_to_date(check_text):
+    new_text = "0"
+    date_index = check_text.find(".")
+    if date_index == 1:
+        for symbol in check_text:
+            new_text += symbol
+    else:
+        new_text = check_text
+    return new_text
 
 
 window = CTk()
@@ -789,6 +801,6 @@ reopen_saved_file()
 # new_month_new_year_annual_turnover()
 # check_all_existing_files()
 # update_monthly_profit_losses()
-current_date_numbers_for_input_date()
+sort_out_table_by_date()
 
 window.mainloop()
