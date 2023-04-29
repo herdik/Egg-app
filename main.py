@@ -370,13 +370,14 @@ def sort_out_table_by_date():
     checking_table.sort(key=lambda x: x[0])
     clear_table()
     for index in range(len(checking_table)):
+        modified_date = change_date_or_remove_zero_to_date(checking_table[index][0])
         if float(checking_table[index][2]) >= 0:
-            table.insert(parent="", index=END, iid=f"{index}", text="", values=(checking_table[index][0],
+            table.insert(parent="", index=END, iid=f"{index}", text="", values=(modified_date,
                                                                                 checking_table[index][1],
                                                                                 checking_table[index][2]),
                          tags=("plus",))
         else:
-            table.insert(parent="", index=END, iid=f"{index}", text="", values=(checking_table[index][0],
+            table.insert(parent="", index=END, iid=f"{index}", text="", values=(modified_date,
                                                                                 checking_table[index][1],
                                                                                 checking_table[index][2]),
                          tags=("minus",))
@@ -538,6 +539,16 @@ def change_date_or_add_zero_to_date(check_text):
     if date_index == 1:
         for symbol in check_text:
             new_text += symbol
+    else:
+        new_text = check_text
+    return new_text
+
+
+def change_date_or_remove_zero_to_date(check_text):
+    new_text = ""
+    if check_text[0] == "0":
+        for index in range(1, len(check_text)):
+            new_text += check_text[index]
     else:
         new_text = check_text
     return new_text
@@ -801,6 +812,5 @@ reopen_saved_file()
 # new_month_new_year_annual_turnover()
 # check_all_existing_files()
 # update_monthly_profit_losses()
-sort_out_table_by_date()
 
 window.mainloop()
