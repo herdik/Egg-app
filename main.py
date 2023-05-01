@@ -235,6 +235,7 @@ def check_all_existing_files():
 
 
 def open_choosed_file():
+    global id_item
     global profit_graph, losses_graph
     clear_table()
     count = 0
@@ -249,14 +250,15 @@ def open_choosed_file():
                     data.append(data_values)
                     data_values = []
                     if float(data[count][2]) < 0:
-                        table.insert(parent="", index=END, iid=f"{count}", text="",
+                        table.insert(parent="", index=END, iid=f"{id_item}", text="",
                                      values=(data[count][0], data[count][1], data[count][2]), tags=("minus",))
                     elif float(data[count][2]) > 0:
-                        table.insert(parent="", index=END, iid=f"{count}", text="",
+                        table.insert(parent="", index=END, iid=f"{id_item}", text="",
                                      values=(data[count][0], data[count][1], data[count][2]), tags=("plus",))
                     else:
                         pass
                     count += 1
+                    id_item += 1
     except:
         print("Súbor sa nenašiel")
 
@@ -787,5 +789,6 @@ reopen_saved_file()
 # new_month_new_year_annual_turnover()
 # check_all_existing_files()
 # update_monthly_profit_losses()
+current_date_numbers_for_input_date()
 
 window.mainloop()
