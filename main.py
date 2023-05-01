@@ -12,8 +12,6 @@ current_dato = time.localtime()
 monthly_profit = 0
 monthly_losses = 0
 id_item = 0
-profit_graph = 106
-losses_graph = 100
 
 months_options = [
     "Január",
@@ -233,7 +231,6 @@ def check_all_existing_files():
 
 def open_choosed_file():
     global id_item
-    global profit_graph, losses_graph
     clear_table()
     count = 0
     data = []
@@ -313,23 +310,7 @@ def open_choosed_file():
     monthly_losses_label_value.configure(text=f"{update_monthly_profit_losses()[1]}")
     profit_graph = yearly_profit
     losses_graph = yearly_losses * -1
-    year_annual_turnover = np.array([profit_graph, losses_graph])
-    my_labels = [f"Príjmy {profit_graph}", f"Výdavky -{losses_graph}"]
-    my_colors = ["#218727", "#d00"]
-    my_explode = [0.1, 0]
-
-    fig = Figure()
-    fig.set_size_inches(4, 2.75)
-    fig.subplots_adjust(right=0.6)
-
-    ax = fig.add_subplot(111)
-    ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode, shadow=True,
-           textprops={'fontsize': 9})
-    ax.legend(title="Celkový ročný obrat", loc="center left", bbox_to_anchor=(1.07, 1.02), prop={"size": 8.5},
-              title_fontsize=9)
-
-    canvas = FigureCanvasTkAgg(fig, graphics_frame)
-    canvas.get_tk_widget().grid(row=0, column=2, padx=(15, 305))
+    pie_graph_call(profit_graph, losses_graph)
 
 
 def save_file_and_update_profit_and_losses():
@@ -517,17 +498,24 @@ def window_settings():
     save_settings.grid(row=0, column=0, pady=(80, 10))
 
 
-# def pie_graph_call():
-#     year_annual_turnover = np.array([profit_graph, losses_graph])
-#     my_labels = [f"Príjmy {profit_graph}", f"Výdavky -{losses_graph}"]
-#     my_colors = ["#218727", "#d00"]
-#     my_explode = [0.1, 0]
-#
-#     ax = fig.add_subplot(111)
-#     ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode, shadow=True,
-#            textprops={'fontsize': 9})
-#     ax.legend(title="Celkový ročný obrat", loc="center left", bbox_to_anchor=(1.07, 1.02), prop={"size": 8.5},
-#               title_fontsize=9)
+def pie_graph_call(profit_graph, losses_graph):
+    year_annual_turnover = np.array([profit_graph, losses_graph])
+    my_labels = [f"Príjmy {profit_graph}", f"Výdavky -{losses_graph}"]
+    my_colors = ["#218727", "#d00"]
+    my_explode = [0.1, 0]
+
+    fig = Figure()
+    fig.set_size_inches(4, 2.75)
+    fig.subplots_adjust(right=0.6)
+
+    ax = fig.add_subplot(111)
+    ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode, shadow=True,
+           textprops={'fontsize': 9})
+    ax.legend(title="Celkový ročný obrat", loc="center left", bbox_to_anchor=(1.07, 1.02), prop={"size": 8.5},
+              title_fontsize=9)
+
+    canvas = FigureCanvasTkAgg(fig, graphics_frame)
+    canvas.get_tk_widget().grid(row=0, column=2, padx=(15, 305))
 
 
 def change_date_or_add_zero_to_date(check_text):
