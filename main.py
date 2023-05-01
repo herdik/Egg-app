@@ -13,6 +13,7 @@ current_dato = time.localtime()
 monthly_profit = 0
 monthly_losses = 0
 id_item = 0
+undo_stack = []
 
 months_options = [
     "Január",
@@ -42,20 +43,7 @@ def current_year_fun():
 # funckia pre int aktuálneho mesiaca
 def current_month_fun():
     current_month_number = current_dato[1]
-    my_calendar = {
-        1: "Január",
-        2: "Február",
-        3: "Marec",
-        4: "Apríl",
-        5: "Máj",
-        6: "Jún",
-        7: "Júl",
-        8: "August",
-        9: "September",
-        10: "Október",
-        11: "November",
-        12: "December"
-    }
+    my_calendar = months_options
     current_month = my_calendar[current_month_number]
     return current_month
 
@@ -100,6 +88,8 @@ def add_items_press_button_add_item():
     input_date.delete(0, END)
     input_date.insert(0, current_date_numbers_for_input_date())
     sort_out_table_by_date()
+    save_month_states()
+    print("")
 
 
 def delete_item_line_from_table():
@@ -107,6 +97,8 @@ def delete_item_line_from_table():
     # prvok na pozícii 1
     selected_item = table.selection()[0]
     table.delete(selected_item)
+    save_month_states()
+    print("")
 
 
 def clear_selected():
@@ -115,12 +107,14 @@ def clear_selected():
     selected_items = table.selection()
     for one_selected in selected_items:
         table.delete(one_selected)
+    save_month_states()
 
 
 def clear_table():
     all_items = table.get_children()
     for one_item in all_items:
         table.delete(one_item)
+    save_month_states()
 
 
 def save_file_fun():
@@ -151,25 +145,11 @@ def check_all_existing_files():
     prices = []
     yearly_profit = 0
     yearly_losses = 0
-    my_calendar = {
-        1: "Január",
-        2: "Február",
-        3: "Marec",
-        4: "Apríl",
-        5: "Máj",
-        6: "Jún",
-        7: "Júl",
-        8: "August",
-        9: "September",
-        10: "Október",
-        11: "November",
-        12: "December"
-    }
+    my_calendar = months_options
     checked_year = current_year_fun()
 
     while checked_year > 2021:
-        for one_month in reversed(my_calendar):
-            checked_month = my_calendar[one_month]
+        for checked_month in reversed(my_calendar):
             try:
                 with open(f"{checked_month + str(checked_year)}.txt", mode="r") as file:
                     # print(f"{checked_month + str(checked_year)}")
@@ -210,44 +190,50 @@ def open_month_default():
     open_month(drop_down_month.get().lower(), str(drop_down_year.get()))
 
 
+def get_month_data_from_file(month, year):
+    try:
+        with open(f"{month.lower() + str(year)}.txt", mode="r") as file:
+            return MonthData(file.readlines(), month, year)
+    except:
+        return MonthData([])
+
+
+def save_month_states():
+    global undo_stack
+    collection = MonthDataCollections(drop_down_month.get(), drop_down_year.get())
+    checked_year = current_year_fun()
+    my_calendar = months_options
+    while checked_year > 2021:
+        for checked_month in reversed(my_calendar):
+            month_data = get_month_data_from_file(checked_month, checked_year)
+            if month_data.is_valid():
+                collection.insert(month_data)
+        checked_year -= 1
+    undo_stack.append(collection)
+    print("")
+
 def open_month(month, year):
+    month_data = get_month_data_from_file(month, year)
+    if not month_data.is_valid():
+        return False
     global id_item
     id_item = 0
     clear_table()
-    try:
-        with open(f"{month + year}.txt", mode="r") as file:
-            month_data = MonthData(file.readlines())
-            for item in month_data.items:
-                value_tag = "plus"
-                if item.price < 0:
-                    value_tag = "minus"
-                table.insert(parent="", index=END, iid=f"{id_item}", text="",
-                             values=(item.date, item.name, item.price), tags=(value_tag,))
-                id_item += 1
-    except:
-        print("Súbor sa nenašiel")
+    for item in month_data.items:
+        value_tag = "plus"
+        if item.price < 0:
+            value_tag = "minus"
+        table.insert(parent="", index=END, iid=f"{id_item}", text="",
+                     values=(item.date, item.name, item.price), tags=(value_tag,))
+        id_item += 1
 
     line_values = []
     prices = []
     yearly_profit = 0
     yearly_losses = 0
-    my_calendar = {
-        1: "Január",
-        2: "Február",
-        3: "Marec",
-        4: "Apríl",
-        5: "Máj",
-        6: "Jún",
-        7: "Júl",
-        8: "August",
-        9: "September",
-        10: "Október",
-        11: "November",
-        12: "December"
-    }
+    my_calendar = months_options
 
-    for one_month in reversed(my_calendar):
-        checked_month = my_calendar[one_month]
+    for checked_month in reversed(my_calendar):
         try:
             with open(f"{checked_month + year}.txt", mode="r") as file:
                 # print(f"{checked_month + str(checked_year)}")
@@ -279,6 +265,7 @@ def open_month(month, year):
     monthly_losses_label.configure(text=f"Výdavky za mesiac {drop_down_month.get()}")
     monthly_profit_label_value.configure(text=f"{update_monthly_profit_losses()[0]}")
     monthly_losses_label_value.configure(text=f"{update_monthly_profit_losses()[1]}")
+    return True
 
 
 def save_file_and_update_profit_and_losses():
