@@ -2,7 +2,6 @@ from tkinter import *
 from customtkinter import *
 import time
 from tkinter import ttk
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
@@ -518,7 +517,10 @@ def pie_graph_call(profit_graph, losses_graph):
         _, _, autopcts = ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode,
                                 shadow=True, textprops={'fontsize': 9, 'weight': 'bold'}, autopct='%1.0f%%',
                                 labeldistance=1.12, startangle=90)
-        plt.setp(autopcts, **{'color': 'white', 'weight': 'bold', 'fontsize': 9})
+        for autopct in autopcts:
+            autopct.set_color('white')
+
+        # plt.setp(autopcts, **{'color': 'white', 'weight': 'bold', 'fontsize': 9}) need:import matplotlib.pyplot as plt
 
         ax.legend(title="Celkový ročný obrat", labels=legend_labels, loc="center left", bbox_to_anchor=(1.02, 1.02),
                   prop={"size": 7, 'weight': 'bold'}, title_fontproperties={'weight': 'bold', "size": 7})
