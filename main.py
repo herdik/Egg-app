@@ -5,6 +5,7 @@ from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
+from month_file_data import *
 
 
 input_test = ""
@@ -143,33 +144,6 @@ def save_file_fun():
                     file.write(third_item + "\n")
 
 
-def reopen_saved_file():
-    global id_item
-    count = 0
-    data = []
-    data_values = []
-    try:
-        with open(f"{current_month_fun().lower() + str(current_year_fun())}.txt", mode="r") as file:
-            for one_line in file:
-                one_line = one_line.strip("\n")
-                data_values.append(one_line)
-                if len(data_values) == 3:
-                    data.append(data_values)
-                    data_values = []
-                    if float(data[count][2]) < 0:
-                        table.insert(parent="", index=END, iid=f"{id_item}", text="",
-                                     values=(data[count][0], data[count][1], data[count][2]), tags=("minus", ))
-                    elif float(data[count][2]) > 0:
-                        table.insert(parent="", index=END, iid=f"{id_item}", text="",
-                                     values=(data[count][0], data[count][1], data[count][2]), tags=("plus",))
-                    else:
-                        pass
-                    count += 1
-                    id_item += 1
-    except:
-        print("Súbor sa nenašiel")
-
-
 def check_all_existing_files():
     all_years = []
     existing_file_in_year = []
@@ -232,28 +206,24 @@ def check_all_existing_files():
     return all_years
 
 
-def open_choosed_file():
+def open_month_default():
+    open_month(drop_down_month.get().lower(), str(drop_down_year.get()))
+
+
+def open_month(month, year):
+    global id_item
+    id_item = 0
     clear_table()
-    count = 0
-    data = []
-    data_values = []
     try:
-        with open(f"{drop_down_month.get().lower() + str(drop_down_year.get())}.txt", mode="r") as file:
-            for one_line in file:
-                one_line = one_line.strip("\n")
-                data_values.append(one_line)
-                if len(data_values) == 3:
-                    data.append(data_values)
-                    data_values = []
-                    if float(data[count][2]) < 0:
-                        table.insert(parent="", index=END, iid=f"{count}", text="",
-                                     values=(data[count][0], data[count][1], data[count][2]), tags=("minus",))
-                    elif float(data[count][2]) > 0:
-                        table.insert(parent="", index=END, iid=f"{count}", text="",
-                                     values=(data[count][0], data[count][1], data[count][2]), tags=("plus",))
-                    else:
-                        pass
-                    count += 1
+        with open(f"{month + year}.txt", mode="r") as file:
+            month_data = MonthData(file.readlines())
+            for item in month_data.items:
+                value_tag = "plus"
+                if item.price < 0:
+                    value_tag = "minus"
+                table.insert(parent="", index=END, iid=f"{id_item}", text="",
+                             values=(item.date, item.name, item.price), tags=(value_tag,))
+                id_item += 1
     except:
         print("Súbor sa nenašiel")
 
@@ -279,12 +249,12 @@ def open_choosed_file():
     for one_month in reversed(my_calendar):
         checked_month = my_calendar[one_month]
         try:
-            with open(f"{checked_month + str(drop_down_year.get())}.txt", mode="r") as file:
+            with open(f"{checked_month + year}.txt", mode="r") as file:
                 # print(f"{checked_month + str(checked_year)}")
                 for file_line in file:
                     file_line = file_line.strip("\n")
                     line_values.append(file_line)
-                    if drop_down_year.get():
+                    if year:
                         if len(line_values) == 3:
                             prices.append(float(line_values[2]))
                             line_values = []
@@ -314,7 +284,7 @@ def open_choosed_file():
 def save_file_and_update_profit_and_losses():
     save_file_fun()
     check_all_existing_files()
-    open_choosed_file()
+    open_month(drop_down_month.get().lower(), str(drop_down_year.get()))
     # monthly_profit_label_value.configure(text=f"{update_monthly_profit_losses()[0]}")
     # monthly_losses_label_value.configure(text=f"{update_monthly_profit_losses()[1]}")
 
@@ -513,7 +483,7 @@ input_font = ("Century Gothic", 14)
 
 
 window.config(set_appearance_mode("Dark"))
-
+print(window["background"])
 
 # Framy
 head_frame = CTkFrame(window, fg_color="transparent")
@@ -584,7 +554,7 @@ current_year_label.grid(row=0, column=4, padx=(260, 90))
 
 # Confirm button
 button_confirm_choose_file = CTkButton(second_frame, text="Vybrať", width=140, font=input_font,
-                                       fg_color=button_color, border_width=3, command=open_choosed_file)
+                                       fg_color=button_color, border_width=3, command=open_month_default)
 button_confirm_choose_file.grid(row=0, column=2, padx=(10, 0))
 
 
@@ -755,7 +725,7 @@ monthly_losses_label_value.grid(row=1, column=1, padx=(10, 760), ipadx=10)
 
 
 # reopen saved file
-reopen_saved_file()
+open_month(current_month_fun().lower(), str(current_year_fun()))
 # calculate profit form table
 # calculate losses from table
 
