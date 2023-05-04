@@ -2,6 +2,7 @@ from tkinter import *
 from customtkinter import *
 import time
 from tkinter import ttk
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
@@ -501,7 +502,7 @@ def window_settings():
 def pie_graph_call(profit_graph, losses_graph):
     if profit_graph == 0 and losses_graph == 0:
         no_data_label = CTkLabel(graphics_frame, text="Žiadne dáta pre zobrazenie grafu", font=main_font)
-        no_data_label.grid(row=0, column=2, padx=(15, 395))
+        no_data_label.grid(row=0, column=2, padx=(0, 15))
     else:
         year_annual_turnover = np.array([profit_graph, losses_graph])
         my_labels = [f"Príjmy", f"Výdavky"]
@@ -509,13 +510,13 @@ def pie_graph_call(profit_graph, losses_graph):
         my_colors = ["#218727", "#d00"]
         my_explode = [0.1, 0]
 
-        fig = Figure()
-        fig.set_size_inches(4, 2.75)
+        fig = Figure((5, 3.5), dpi=80)
+        # fig_2.set_size_inches(4, 2.75)
         fig.subplots_adjust(right=0.68)
 
         ax = fig.add_subplot(111)
         _, _, autopcts = ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode,
-                                shadow=True, textprops={'fontsize': 9, 'weight': 'bold'}, autopct='%1.0f%%',
+                                shadow=True, textprops={'fontsize': 10.5, 'weight': 'bold'}, autopct='%1.0f%%',
                                 labeldistance=1.12, startangle=90)
         for autopct in autopcts:
             autopct.set_color('white')
@@ -523,10 +524,10 @@ def pie_graph_call(profit_graph, losses_graph):
         # plt.setp(autopcts, **{'color': 'white', 'weight': 'bold', 'fontsize': 9}) need:import matplotlib.pyplot as plt
 
         ax.legend(title="Celkový ročný obrat", labels=legend_labels, loc="center left", bbox_to_anchor=(1.02, 1.02),
-                  prop={"size": 7, 'weight': 'bold'}, title_fontproperties={'weight': 'bold', "size": 7})
+                  prop={"size": 8, 'weight': 'bold'}, title_fontproperties={'weight': 'bold', "size": 9})
 
         canvas = FigureCanvasTkAgg(fig, graphics_frame)
-        canvas.get_tk_widget().grid(row=0, column=2, padx=(15, 385))
+        canvas.get_tk_widget().grid(row=0, column=2)
 
 
 def change_date_or_add_zero_to_date(check_text):
@@ -733,13 +734,28 @@ scrollbar_table.grid(row=0, column=1, padx=(0, 10), sticky=N+S)
 table.configure(yscrollcommand=scrollbar_table.set)
 
 # ===Graph===
-# fig = Figure()
-# fig.set_size_inches(4, 2.75)
-# fig.subplots_adjust(right=0.6)
-#
-# canvas = FigureCanvasTkAgg(fig, graphics_frame)
-# canvas.get_tk_widget().grid(row=0, column=2, padx=(15, 305))
-# ===Graph=== END
+x_months = np.array(['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
+y_profit = np.array([0, 190, 70, 51, 4, 60, 30, 190, 70, 51, 4, 60])
+z_losses = np.array([0, 110, 15, 14, 56, 48, 6, 110, 15, 14, 56, 48])
+
+
+fig_2 = Figure(figsize=(5, 3.5), dpi=80)
+# fig_2.set_size_inches(4, 2.75)
+
+ax_2 = fig_2.add_subplot(111)
+
+x_axis = np.arange(len(x_months))
+
+ax_2.bar(x_axis - 0.2, y_profit, 0.4, label="Príjmy")
+ax_2.bar(x_axis + 0.2, z_losses, 0.4, label="Výdavky")
+ax_2.set_xticks(x_axis, x_months)
+ax_2.set_ylabel('Príjmy a výdavky v mene €')
+ax_2.legend(loc='upper right', ncols=2, bbox_to_anchor=(0.8, 1.15))
+
+canvas_2 = FigureCanvasTkAgg(fig_2, graphics_frame)
+canvas_2.draw()
+canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 0))
+
 
 # ====== Graphics Frame END =======
 # Buttons for table
