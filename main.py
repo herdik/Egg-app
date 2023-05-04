@@ -501,7 +501,7 @@ def window_settings():
 def pie_graph_call(profit_graph, losses_graph):
     if profit_graph == 0 and losses_graph == 0:
         no_data_label = CTkLabel(graphics_frame, text="Žiadne dáta pre zobrazenie grafu", font=main_font)
-        no_data_label.grid(row=0, column=2, padx=(15, 315))
+        no_data_label.grid(row=0, column=2, padx=(15, 395))
     else:
         year_annual_turnover = np.array([profit_graph, losses_graph])
         my_labels = [f"Príjmy", f"Výdavky"]
@@ -526,7 +526,7 @@ def pie_graph_call(profit_graph, losses_graph):
                   prop={"size": 7, 'weight': 'bold'}, title_fontproperties={'weight': 'bold', "size": 7})
 
         canvas = FigureCanvasTkAgg(fig, graphics_frame)
-        canvas.get_tk_widget().grid(row=0, column=2, padx=(15, 305))
+        canvas.get_tk_widget().grid(row=0, column=2, padx=(15, 385))
 
 
 def change_date_or_add_zero_to_date(check_text):
@@ -551,7 +551,7 @@ def change_date_or_remove_zero_to_date(check_text):
 
 
 window = CTk()
-window.geometry("1280x732+100+100")
+window.geometry("1360x732+100+100")
 window.title("Velušovské vajíčko 1.0 - nastavenia")
 window.iconbitmap("icon.ico")
 window.resizable(False, False)
@@ -608,7 +608,7 @@ profit_and_losses_label.grid(row=0, column=1, padx=(300, 80))
 
 # Label Year overview of profit and losses
 year_overview_profit_and_losses = CTkLabel(head_frame, text="Mesačný prehľad", font=main_font)
-year_overview_profit_and_losses.grid(row=0, column=2, padx=(80, 50))
+year_overview_profit_and_losses.grid(row=0, column=2, padx=(80, 130))
 # HEAD FRAME END
 
 # HEAD FRAME
@@ -636,7 +636,7 @@ drop_down_year.grid(row=0, column=1)
 # Label current year
 current_year_label = CTkLabel(second_frame, text=f"Rok  {current_year_fun()}", font=main_font)
 # current_year_label.grid(row=1, column=3, padx=(80, 50))
-current_year_label.grid(row=0, column=4, padx=(260, 90))
+current_year_label.grid(row=0, column=4, padx=(260, 170))
 
 # Confirm button
 button_confirm_choose_file = CTkButton(second_frame, text="Vybrať", width=140, font=input_font,
@@ -652,7 +652,7 @@ drop_down_customer_losses.grid(row=0, column=0)
 
 # Label for # Customer/Losses
 customer_or_losses_label = CTkLabel(customer_losses_frame, width=100, text="Zákazník / Výdavok", font=bottom_label_font)
-customer_or_losses_label.grid(row=0, column=1, padx=(10, 776))
+customer_or_losses_label.grid(row=0, column=1, padx=(10, 856))
 
 # CUSTOMER/LOSSES FRAME - END
 
@@ -676,7 +676,7 @@ input_price.grid(row=0, column=2)
 # Button Add item
 button_add_item = CTkButton(table_items_frame, text="Pridaj položku", width=50, font=input_font, fg_color=button_color,
                             border_width=3, command=add_items_press_button_add_item)
-button_add_item.grid(row=0, column=3, padx=(10, 750))
+button_add_item.grid(row=0, column=3, padx=(10, 830))
 
 # TABLE ITEMS FRAME - END
 
@@ -758,7 +758,7 @@ button_clear_selected.grid(row=0, column=1, padx=(10, 5))
 # Delete all items
 button_clear_table = CTkButton(buttons_frame_table, text="Vymazať tabuľku", width=140, font=input_font,
                                fg_color=button_color, border_width=3, command=clear_table)
-button_clear_table.grid(row=0, column=2, padx=(5, 750))
+button_clear_table.grid(row=0, column=2, padx=(5, 830))
 
 # Settings Button
 button_settings = CTkButton(buttons_frame_table, text="Nastavenia", width=140, font=input_font,
@@ -773,7 +773,7 @@ button_save_file.grid(row=1, column=1, padx=(5, 5), pady=20)
 # Quit file
 button_quit_file = CTkButton(buttons_frame_table, text="Zavrieť súbor", width=140, font=input_font,
                              fg_color=button_color, border_width=3, command=window.destroy)
-button_quit_file.grid(row=1, column=2, padx=(5, 750), pady=20)
+button_quit_file.grid(row=1, column=2, padx=(5, 830), pady=20)
 
 
 # BOTTOM FRAME
@@ -788,12 +788,12 @@ monthly_profit_label_value.grid(row=1, column=0, padx=(0, 10), ipadx=10)
 
 # Monthly label losses
 monthly_losses_label = CTkLabel(bottom_frame, text=f"Výdavky za mesiac {drop_down_month.get()}", font=bottom_label_font)
-monthly_losses_label.grid(row=0, column=1, padx=(10, 760), ipadx=10)
+monthly_losses_label.grid(row=0, column=1, padx=(10, 840), ipadx=10)
 
 # Monthly label losses value
 monthly_losses_label_value = CTkLabel(bottom_frame, text=f"{update_monthly_profit_losses()[1]}", font=bottom_label_font,
                                       fg_color="#d00")
-monthly_losses_label_value.grid(row=1, column=1, padx=(10, 760), ipadx=10)
+monthly_losses_label_value.grid(row=1, column=1, padx=(10, 840), ipadx=10)
 
 # # Mazanie vstupu pre funkciu
 # clicked_input_price_key = input_price.bind("<Key>", clicked_input_price_key_fun)
