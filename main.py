@@ -506,7 +506,10 @@ def pie_graph_call(profit_graph, losses_graph):
     else:
         year_annual_turnover = np.array([profit_graph, losses_graph])
         my_labels = [f"Príjmy", f"Výdavky"]
-        legend_labels = [f"Príjmy {profit_graph}", f"Výdavky -{losses_graph}"]
+        if losses_graph == 0:
+            legend_labels = [f"Príjmy {profit_graph}", f"Výdavky {losses_graph}"]
+        else:
+            legend_labels = [f"Príjmy {profit_graph}", f"Výdavky -{losses_graph}"]
         my_colors = ["#218727", "#d00"]
         my_explode = [0.1, 0]
 
@@ -746,8 +749,8 @@ ax_2 = fig_2.add_subplot(111)
 
 x_axis = np.arange(len(x_months))
 
-ax_2.bar(x_axis - 0.2, y_profit, 0.4, label="Príjmy")
-ax_2.bar(x_axis + 0.2, z_losses, 0.4, label="Výdavky")
+ax_2.bar(x_axis - 0.2, y_profit, 0.4, label="Príjmy", color="g")
+ax_2.bar(x_axis + 0.2, z_losses, 0.4, label="Výdavky", color="r")
 ax_2.set_xticks(x_axis, x_months)
 ax_2.set_ylabel('Príjmy a výdavky v mene €')
 ax_2.legend(loc='upper right', ncols=2, bbox_to_anchor=(0.8, 1.15))
