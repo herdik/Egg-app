@@ -31,17 +31,7 @@ months_options = [
 items_options = []
 customers_options = []
 
-
-# funckia pre aktuálny rok
-def current_year_fun():
-    current_year = current_dato[0]
-    return current_year
-
-
-# funckia pre int aktuálneho mesiaca
-def current_month_fun():
-    current_month_number = current_dato[1]
-    my_calendar = {
+my_calendar = {
         1: "Január",
         2: "Február",
         3: "Marec",
@@ -55,6 +45,18 @@ def current_month_fun():
         11: "November",
         12: "December"
     }
+
+
+# funckia pre aktuálny rok
+def current_year_fun():
+    current_year = current_dato[0]
+    return current_year
+
+
+# funckia pre int aktuálneho mesiaca
+def current_month_fun():
+    global my_calendar
+    current_month_number = current_dato[1]
     current_month = my_calendar[current_month_number]
     return current_month
 
@@ -168,26 +170,13 @@ def reopen_saved_file():
 
 
 def check_all_existing_files():
+    global my_calendar
     all_years = []
     existing_file_in_year = []
     line_values = []
     prices = []
     yearly_profit = 0
     yearly_losses = 0
-    my_calendar = {
-        1: "Január",
-        2: "Február",
-        3: "Marec",
-        4: "Apríl",
-        5: "Máj",
-        6: "Jún",
-        7: "Júl",
-        8: "August",
-        9: "September",
-        10: "Október",
-        11: "November",
-        12: "December"
-    }
     checked_year = current_year_fun()
 
     while checked_year > 2021:
@@ -231,6 +220,7 @@ def check_all_existing_files():
 
 def open_choosed_file():
     global id_item
+    global my_calendar
     clear_table()
     count = 0
     data = []
@@ -260,20 +250,6 @@ def open_choosed_file():
     prices = []
     yearly_profit = 0
     yearly_losses = 0
-    my_calendar = {
-        1: "Január",
-        2: "Február",
-        3: "Marec",
-        4: "Apríl",
-        5: "Máj",
-        6: "Jún",
-        7: "Júl",
-        8: "August",
-        9: "September",
-        10: "Október",
-        11: "November",
-        12: "December"
-    }
 
     for one_month in reversed(my_calendar):
         checked_month = my_calendar[one_month]

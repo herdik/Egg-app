@@ -1,15 +1,21 @@
 1.4.2023
-Vajíèka-Stankoví
-2
+Mäso na polievku-Martiška
+60
 2.4.2023
 Mäso na polievku-Smolnickı
 4
 3.4.2023
 Vajíèka-Martiška
 8
+4.4.2023
+Kukurica-Vıdavok
+-100
 6.4.2023
 Vajíèka-Martiška
 6
+6.5.2023
+Repa-Vıdavok
+-30
 11.4.2023
 Vajíèka
 25
@@ -31,3 +37,6 @@ Vajíèka-Stankoví
 29.4.2023
 Zmeska-Vıdavok
 -6
+30.4.2023
+Dezinfekcia-Vıdavok
+-16
