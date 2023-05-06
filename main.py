@@ -450,7 +450,7 @@ def window_settings():
 
     settings_window = CTkToplevel()
     settings_window.geometry("640x366+400+280")
-    settings_window.title("Velušovské vajíčko 1.0")
+    settings_window.title("Velušovské vajíčko 1.0 - nastavenia")
     settings_window.iconbitmap("icon.ico")
     settings_window.resizable(False, False)
     settings_window.grab_set()
@@ -566,17 +566,50 @@ def change_date_or_remove_zero_to_date(check_text):
     return new_text
 
 
-def autolabel(rectangle_group):
-    for rect in rectangle_group:
-        height = rect.get_height()
+def bar_graph_values_update():
 
-        ax_2.annotate(str(height), xy=(rect.get_x() + rect.get_width() / 2, height), ha='center', xytext=(0, 1),
-                      textcoords='offset points', color='black', fontsize=7)
+    def autolabel(rectangle_group):
+        for rect in rectangle_group:
+            height = rect.get_height()
+
+            ax_2.annotate(str(height), xy=(rect.get_x() + rect.get_width() / 2, height), ha='center', xytext=(1, 5),
+                          textcoords='offset points', color='black', fontsize=7, rotation=90)
+
+    # ===Graph===
+    x_months = np.array(['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
+    y_profit = np.array([0, 175, 70, 51, 4, 60, 30, 190, 70, 51, 4, 60])
+    z_losses = np.array([0, 110, 15, 14, 56, 48, 6, 110, 15, 14, 56, 48])
+
+    fig_2 = Figure(figsize=(5, 3.5), dpi=80)
+    # fig_2.set_size_inches(4, 2.75)
+
+    ax_2 = fig_2.add_subplot(111)
+
+    x_axis = np.arange(len(x_months))
+
+    rect1 = ax_2.bar(x_axis - 0.2, y_profit, 0.4, label="Príjmy", color="g")
+    rect2 = ax_2.bar(x_axis + 0.2, z_losses, 0.4, label="Výdavky", color="r")
+
+    ax_2.set_xticks(x_axis, x_months)
+    ax_2.set_ylabel('Príjmy a výdavky v mene €')
+
+    ax_2.legend(loc='upper right', ncols=2, bbox_to_anchor=(0.8, 1.15))
+
+    autolabel(rect1)
+    autolabel(rect2)
+    ax_2.set_ylim(0, 210)
+    canvas_2 = FigureCanvasTkAgg(fig_2, graphics_frame)
+    canvas_2.draw()
+    canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 0))
+
+
+def get_bar_values():
+    print("a")
 
 
 window = CTk()
 window.geometry("1360x732+100+100")
-window.title("Velušovské vajíčko 1.0 - nastavenia")
+window.title("Velušovské vajíčko 1.0")
 window.iconbitmap("icon.ico")
 window.resizable(False, False)
 
@@ -765,34 +798,6 @@ scrollbar_table = CTkScrollbar(graphics_frame, command=table.yview)
 scrollbar_table.grid(row=0, column=1, padx=(0, 10), sticky=N+S)
 table.configure(yscrollcommand=scrollbar_table.set)
 
-# ===Graph===
-x_months = np.array(['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
-y_profit = np.array([0, 190, 70, 51, 4, 60, 30, 190, 70, 51, 4, 60])
-z_losses = np.array([0, 110, 15, 14, 56, 48, 6, 110, 15, 14, 56, 48])
-
-
-fig_2 = Figure(figsize=(5, 3.5), dpi=80)
-# fig_2.set_size_inches(4, 2.75)
-
-ax_2 = fig_2.add_subplot(111)
-
-x_axis = np.arange(len(x_months))
-
-rect1 = ax_2.bar(x_axis - 0.2, y_profit, 0.4, label="Príjmy", color="g")
-rect2 = ax_2.bar(x_axis + 0.2, z_losses, 0.4, label="Výdavky", color="r")
-
-ax_2.set_xticks(x_axis, x_months)
-ax_2.set_ylabel('Príjmy a výdavky v mene €')
-
-ax_2.legend(loc='upper right', ncols=2, bbox_to_anchor=(0.8, 1.15))
-
-autolabel(rect1)
-autolabel(rect2)
-
-canvas_2 = FigureCanvasTkAgg(fig_2, graphics_frame)
-canvas_2.draw()
-# canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 0))
-canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 0))
 
 # ====== Graphics Frame END =======
 # Buttons for table
@@ -876,5 +881,6 @@ open_choosed_file()
 # new_month_new_year_annual_turnover()
 # check_all_existing_files()
 # update_monthly_profit_losses()
+bar_graph_values_update()
 
 window.mainloop()
