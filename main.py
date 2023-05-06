@@ -296,6 +296,7 @@ def open_choosed_file():
     profit_graph = yearly_profit
     losses_graph = yearly_losses * -1
     pie_graph_call(profit_graph, losses_graph)
+    bar_graph_values_update()
 
 
 def save_file_and_update_profit_and_losses():
@@ -543,18 +544,73 @@ def change_date_or_remove_zero_to_date(check_text):
 
 
 def bar_graph_values_update():
+    global my_calendar
+    line_items = []
+    price_items = []
+    graph_values = []
+    check_number = 1
+    plus_values = 0
+    minus_values = 0
+    y_profit = []
+    z_losses = []
+
+    for one_month in my_calendar:
+        checked_month = my_calendar[one_month]
+        if one_month == check_number:
+            try:
+                with open(f"{checked_month + str(drop_down_year.get())}.txt", mode="r") as file:
+                    # print(f"{checked_month + str(checked_year)}")
+                    for file_line in file:
+                        file_line = file_line.strip("\n")
+                        line_items.append(file_line)
+                        if drop_down_year.get():
+                            if len(line_items) == 3:
+                                if float(line_items[2]) > 0:
+                                    plus_values += float(line_items[2])
+                                else:
+                                    minus_values += float(line_items[2])
+                                line_items = []
+                    price_items.append(plus_values)
+                    price_items.append(minus_values)
+                    plus_values = 0
+                    minus_values = 0
+            except:
+                # print(f"{checked_month + str(checked_year)} súbor sa nenašiel")
+                pass
+        graph_values.append(price_items)
+        price_items = []
+        check_number += 1
 
     def autolabel(rectangle_group):
         for rect in rectangle_group:
             height = rect.get_height()
-
-            ax_2.annotate(str(height), xy=(rect.get_x() + rect.get_width() / 2, height), ha='center', xytext=(1, 5),
+            my_annotate = str(height)
+            if str(height).endswith(".0"):
+                my_annotate = str(int(height))
+            if height == 0:
+                my_annotate = ''
+            ax_2.annotate(my_annotate, xy=(rect.get_x() + rect.get_width() / 2, height), ha='center', xytext=(1, 5),
                           textcoords='offset points', color='black', fontsize=7, rotation=90)
 
     # ===Graph===
-    x_months = np.array(['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
-    y_profit = np.array([0, 175, 70, 51, 4, 60, 30, 190, 70, 51, 4, 60])
-    z_losses = np.array([0, 110, 15, 14, 56, 48, 6, 110, 15, 14, 56, 48])
+    x_months = ['Jan', 'Feb', 'Mar', 'Apr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec']
+
+    for i in range(len(graph_values)):
+        try:
+            one_graph_value = graph_values[i][0]
+        except:
+            one_graph_value = 0
+        y_profit.append(one_graph_value)
+
+    for i in range(len(graph_values)):
+        try:
+            second_graph_value = graph_values[i][1] * -1
+        except:
+            second_graph_value = 0
+        z_losses.append(second_graph_value)
+
+    # y_profit = [graph_values[0][0], graph_values[1][0], 70, 51, 4, 60, 30, 190, 70, 51, 4, 60]
+    # z_losses = [graph_values[0][1] * -1, 110, 15, 14, 56, 48, 6, 110, 15, 14, 56, 48]
 
     fig_2 = Figure(figsize=(5, 3.5), dpi=80)
     # fig_2.set_size_inches(4, 2.75)
@@ -579,8 +635,43 @@ def bar_graph_values_update():
     canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 0))
 
 
-def get_bar_values():
-    print("a")
+# def get_bar_values():
+#     global my_calendar
+#     line_items = []
+#     price_items = []
+#     graph_values = []
+#     check_number = 1
+#     plus_values = 0
+#     minus_values = 0
+#
+#     for one_month in my_calendar:
+#         checked_month = my_calendar[one_month]
+#         if one_month == check_number:
+#             try:
+#                 with open(f"{checked_month + str(drop_down_year.get())}.txt", mode="r") as file:
+#                     # print(f"{checked_month + str(checked_year)}")
+#                     for file_line in file:
+#                         file_line = file_line.strip("\n")
+#                         line_items.append(file_line)
+#                         if drop_down_year.get():
+#                             if len(line_items) == 3:
+#                                 if float(line_items[2]) > 0:
+#                                     plus_values += float(line_items[2])
+#                                 else:
+#                                     minus_values += float(line_items[2])
+#                                 line_items = []
+#                     price_items.append(plus_values)
+#                     price_items.append(minus_values)
+#                     plus_values = 0
+#                     minus_values = 0
+#             except:
+#                 # print(f"{checked_month + str(checked_year)} súbor sa nenašiel")
+#                 pass
+#         graph_values.append(price_items)
+#         price_items = []
+#         check_number += 1
+#     print(graph_values)
+#     return graph_values
 
 
 window = CTk()
@@ -857,6 +948,6 @@ open_choosed_file()
 # new_month_new_year_annual_turnover()
 # check_all_existing_files()
 # update_monthly_profit_losses()
-bar_graph_values_update()
+# get_bar_values()
 
 window.mainloop()
