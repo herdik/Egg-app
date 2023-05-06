@@ -301,13 +301,22 @@ def open_choosed_file():
             yearly_losses += one_price
             if str(yearly_losses).endswith("0"):
                 yearly_losses = int(yearly_losses)
+
+    final_profit_sum = yearly_profit + yearly_losses
+
+    if str(final_profit_sum).endswith("0"):
+        final_profit_sum = int(final_profit_sum)
+
     profit_label.configure(text=f"Príjmy         {yearly_profit}")
     losses_label.configure(text=f"Výdavky    {yearly_losses}")
     current_year_label.configure(text=f"Rok  {drop_down_year.get()}")
-    monthly_profit_label.configure(text=f"Príjem za mesiac {drop_down_month.get()}")
-    monthly_losses_label.configure(text=f"Výdavky za mesiac {drop_down_month.get()}")
+    monthly_profit_label.configure(text=f"Príjem - {drop_down_month.get()}")
+    monthly_losses_label.configure(text=f"Výdavky - {drop_down_month.get()}")
+    final_monthly_profit_label.configure(text=f"Zisk/strata - {drop_down_month.get()}")
     monthly_profit_label_value.configure(text=f"{update_monthly_profit_losses()[0]}")
     monthly_losses_label_value.configure(text=f"{update_monthly_profit_losses()[1]}")
+    final_monthly_profit_label_value.configure(text=f"{update_monthly_profit_losses()[2]}")
+    value_final_profit.configure(text=f"{final_profit_sum}")
     profit_graph = yearly_profit
     losses_graph = yearly_losses * -1
     pie_graph_call(profit_graph, losses_graph)
@@ -382,12 +391,16 @@ def update_monthly_profit_losses():
         else:
             minus_values += float(value)
 
+    monthly_profit_sum = plus_values + minus_values
+
     if str(plus_values).endswith(".0"):
         plus_values = int(plus_values)
     if str(minus_values).endswith(".0"):
         minus_values = int(minus_values)
+    if str(monthly_profit_sum).endswith(".0"):
+        monthly_profit_sum = int(monthly_profit_sum)
 
-    return plus_values, minus_values
+    return plus_values, minus_values, monthly_profit_sum
 
 
 def window_settings():
@@ -557,7 +570,7 @@ def autolabel(rectangle_group):
     for rect in rectangle_group:
         height = rect.get_height()
 
-        ax_2.annotate(str(height), xy=(rect.get_x() + rect.get_width() / 2, height), ha='center', xytext=(0, 3),
+        ax_2.annotate(str(height), xy=(rect.get_x() + rect.get_width() / 2, height), ha='center', xytext=(0, 1),
                       textcoords='offset points', color='black', fontsize=7)
 
 
@@ -663,7 +676,12 @@ drop_down_customer_losses.grid(row=0, column=0)
 
 # Label for # Customer/Losses
 customer_or_losses_label = CTkLabel(customer_losses_frame, width=100, text="Zákazník / Výdavok", font=bottom_label_font)
-customer_or_losses_label.grid(row=0, column=1, padx=(10, 856))
+customer_or_losses_label.grid(row=0, column=1, padx=(10, 0))
+
+# Final yearly profit label
+final_profit = CTkLabel(customer_losses_frame, text="Ročný zisk/strata", font=main_font, width=120)
+final_profit.grid(row=0, column=2, padx=(240, 450), ipadx=20)
+
 
 # CUSTOMER/LOSSES FRAME - END
 
@@ -687,7 +705,11 @@ input_price.grid(row=0, column=2)
 # Button Add item
 button_add_item = CTkButton(table_items_frame, text="Pridaj položku", width=50, font=input_font, fg_color=button_color,
                             border_width=3, command=add_items_press_button_add_item)
-button_add_item.grid(row=0, column=3, padx=(10, 830))
+button_add_item.grid(row=0, column=3, padx=(10, 0))
+
+# Final yearly profit label VALUE
+value_final_profit = CTkLabel(table_items_frame, text="0", width=120, font=main_font)
+value_final_profit.grid(row=0, column=4, padx=(170, 550))
 
 # TABLE ITEMS FRAME - END
 
@@ -809,22 +831,37 @@ button_quit_file.grid(row=1, column=2, padx=(5, 830), pady=20)
 
 # BOTTOM FRAME
 # Monthly label profit
-monthly_profit_label = CTkLabel(bottom_frame, text=f"Príjem za mesiac {drop_down_month.get()}", font=bottom_label_font)
+monthly_profit_label = CTkLabel(bottom_frame, text=f"Príjem - {drop_down_month.get()}", font=bottom_label_font,
+                                width=200)
 monthly_profit_label.grid(row=0, column=0, padx=(0, 10), ipadx=10)
 
 # Monthly label profit value
 monthly_profit_label_value = CTkLabel(bottom_frame, text=f"{update_monthly_profit_losses()[0]}", font=bottom_label_font,
-                                      fg_color="#218727")
+                                      fg_color="#218727", width=50)
 monthly_profit_label_value.grid(row=1, column=0, padx=(0, 10), ipadx=10)
 
 # Monthly label losses
-monthly_losses_label = CTkLabel(bottom_frame, text=f"Výdavky za mesiac {drop_down_month.get()}", font=bottom_label_font)
-monthly_losses_label.grid(row=0, column=1, padx=(10, 840), ipadx=10)
+monthly_losses_label = CTkLabel(bottom_frame, text=f"Výdavky - {drop_down_month.get()}", font=bottom_label_font,
+                                width=200)
+monthly_losses_label.grid(row=0, column=1, padx=(10, 0), ipadx=10)
 
 # Monthly label losses value
 monthly_losses_label_value = CTkLabel(bottom_frame, text=f"{update_monthly_profit_losses()[1]}", font=bottom_label_font,
-                                      fg_color="#d00")
-monthly_losses_label_value.grid(row=1, column=1, padx=(10, 840), ipadx=10)
+                                      fg_color="#d00", width=50)
+monthly_losses_label_value.grid(row=1, column=1, padx=(10, 0), ipadx=10)
+
+# Monthly label for final profit in choosed_month
+final_monthly_profit_label = CTkLabel(bottom_frame, text=f"Zisk/strata - {drop_down_month.get()}",
+                                      font=("Century Gothic", 16, "bold"),
+                                      width=200, fg_color="white", text_color="black")
+final_monthly_profit_label.grid(row=0, column=2, padx=(140, 500), ipadx=10)
+
+# Monthly label for final profit in choosed_month VALUE
+final_monthly_profit_label_value = CTkLabel(bottom_frame, text=f"{update_monthly_profit_losses()[2]}",
+                                            font=("Century Gothic", 18, "bold"),
+                                            width=200, fg_color="white", text_color="black")
+final_monthly_profit_label_value.grid(row=1, column=2, padx=(140, 500), ipadx=10)
+
 
 # # Mazanie vstupu pre funkciu
 # clicked_input_price_key = input_price.bind("<Key>", clicked_input_price_key_fun)
