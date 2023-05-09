@@ -627,51 +627,23 @@ def bar_graph_values_update():
 
     ax_2.legend(loc='upper right', ncols=2, bbox_to_anchor=(0.8, 1.15))
 
+    # annotate function called
     autolabel(rect1)
     autolabel(rect2)
-    ax_2.set_ylim(0, 210)
+
+    # get higest number to set_ylim
+    highest_y = max(y_profit)
+    highest_z = max(z_losses)
+    if highest_y > highest_z:
+        highest_number = highest_y + 20
+    else:
+        highest_number = highest_z + 20
+
+    ax_2.set_ylim(0, highest_number)
+
     canvas_2 = FigureCanvasTkAgg(fig_2, graphics_frame)
     canvas_2.draw()
-    canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 0))
-
-
-# def get_bar_values():
-#     global my_calendar
-#     line_items = []
-#     price_items = []
-#     graph_values = []
-#     check_number = 1
-#     plus_values = 0
-#     minus_values = 0
-#
-#     for one_month in my_calendar:
-#         checked_month = my_calendar[one_month]
-#         if one_month == check_number:
-#             try:
-#                 with open(f"{checked_month + str(drop_down_year.get())}.txt", mode="r") as file:
-#                     # print(f"{checked_month + str(checked_year)}")
-#                     for file_line in file:
-#                         file_line = file_line.strip("\n")
-#                         line_items.append(file_line)
-#                         if drop_down_year.get():
-#                             if len(line_items) == 3:
-#                                 if float(line_items[2]) > 0:
-#                                     plus_values += float(line_items[2])
-#                                 else:
-#                                     minus_values += float(line_items[2])
-#                                 line_items = []
-#                     price_items.append(plus_values)
-#                     price_items.append(minus_values)
-#                     plus_values = 0
-#                     minus_values = 0
-#             except:
-#                 # print(f"{checked_month + str(checked_year)} súbor sa nenašiel")
-#                 pass
-#         graph_values.append(price_items)
-#         price_items = []
-#         check_number += 1
-#     print(graph_values)
-#     return graph_values
+    canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 400))
 
 
 window = CTk()
@@ -857,7 +829,7 @@ table.heading("Cena", text="Cena", anchor=CENTER)
 table.tag_configure("minus", background="#d00")
 table.tag_configure("plus", background="#218727")
 
-table.grid(row=0, column=0)
+table.grid(row=0, column=0, padx=(30, 0))
 
 
 # Scrollbar
