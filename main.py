@@ -646,6 +646,15 @@ def bar_graph_values_update():
     canvas_2.get_tk_widget().grid(row=0, column=3, padx=(15, 400))
 
 
+def customers_overview():
+    customers_overview_window = CTkToplevel()
+    customers_overview_window.geometry("840x632+400+280")
+    customers_overview_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
+    customers_overview_window.iconbitmap("icon.ico")
+    customers_overview_window.resizable(False, False)
+    customers_overview_window.grab_set()
+
+
 window = CTk()
 window.geometry("1360x732+100+100")
 window.title("Velušovské vajíčko 1.0")
@@ -867,10 +876,10 @@ button_save_file = CTkButton(buttons_frame_table, text="Uložiť tabuľku", widt
                              fg_color=button_color, border_width=3, command=save_file_and_update_profit_and_losses)
 button_save_file.grid(row=1, column=1, padx=(5, 5), pady=20)
 
-# Quit file
-button_quit_file = CTkButton(buttons_frame_table, text="Zavrieť súbor", width=140, font=input_font,
-                             fg_color=button_color, border_width=3, command=window.destroy)
-button_quit_file.grid(row=1, column=2, padx=(5, 830), pady=20)
+# Customer overview button
+button_customer_overview = CTkButton(buttons_frame_table, text="Prehľad zákazníkov", width=140, font=input_font,
+                                     fg_color=button_color, border_width=3, command=customers_overview)
+button_customer_overview.grid(row=1, column=2, padx=(5, 830), pady=20)
 
 
 # BOTTOM FRAME
@@ -905,6 +914,14 @@ final_monthly_profit_label_value = CTkLabel(bottom_frame, text=f"{update_monthly
                                             font=("Century Gothic", 18, "bold"),
                                             width=200, fg_color="white", text_color="black")
 final_monthly_profit_label_value.grid(row=1, column=2, padx=(140, 500), ipadx=10)
+
+
+# Insert picture/logo
+canvas_3 = Canvas(window, width=120, height=89, background='gray14', highlightthickness=0)
+canvas_3.place(x=1230, y=630)
+
+egg_picture = PhotoImage(file="logo.png")
+canvas_3.create_image(0, 0, anchor="nw", image=egg_picture)
 
 
 # # Mazanie vstupu pre funkciu
