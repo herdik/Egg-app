@@ -30,6 +30,7 @@ months_options = [
 
 items_options = []
 customers_options = []
+current_passed_customers_options = []
 
 my_calendar = {
         1: "Január",
@@ -647,12 +648,56 @@ def bar_graph_values_update():
 
 
 def customers_overview():
-    customers_overview_window = CTkToplevel()
-    customers_overview_window.geometry("840x632+400+280")
-    customers_overview_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
-    customers_overview_window.iconbitmap("icon.ico")
-    customers_overview_window.resizable(False, False)
-    customers_overview_window.grab_set()
+
+    def current_and_passed_customers():
+        global my_calendar
+
+    customers_window = CTkToplevel()
+    customers_window.geometry("840x632+400+280")
+    customers_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
+    customers_window.iconbitmap("icon.ico")
+    customers_window.resizable(False, False)
+    customers_window.grab_set()
+    # Frame
+    first_frame_customers_window = CTkFrame(customers_window, fg_color="transparent")
+    first_frame_customers_window.pack(pady=30)
+
+    # Label for choose year
+    choose_year_label = CTkLabel(first_frame_customers_window, width=150, text="Potvrď výber roku",
+                                 font=bottom_label_font)
+    choose_year_label.grid(row=0, column=0)
+
+    # Year options to choose customers overview
+    drop_down_customers_year = CTkOptionMenu(first_frame_customers_window, values=check_all_existing_files(),
+                                             fg_color=button_color,
+                                             button_color="#3d345f")
+    drop_down_customers_year.set(current_year_fun())
+    drop_down_customers_year.grid(row=0, column=1, padx=10)
+
+    # Confirm button to select year for customers options fill up
+    confirm_button = CTkButton(first_frame_customers_window, text="Potvrdiť", width=140, font=input_font,
+                               fg_color=button_color, border_width=3)
+    confirm_button.grid(row=0, column=2)
+
+    # Label for choose customer in selected year
+    choose_customer_label = CTkLabel(first_frame_customers_window, width=150, text="Vyber zákazníka",
+                                     font=bottom_label_font)
+    choose_customer_label.grid(row=1, column=0, pady=20)
+
+    # Year options to choose customers overview
+    drop_down_customer_options = CTkOptionMenu(first_frame_customers_window,
+                                               values=current_passed_customers_options,
+                                               fg_color=button_color, button_color="#3d345f")
+
+    drop_down_customer_options.set("Žiaden zákazník")
+    drop_down_customer_options.grid(row=1, column=1, padx=10, pady=20)
+
+    # Confirm button to show customer overview table
+    confirm_button_2 = CTkButton(first_frame_customers_window, text="Potvrdiť", width=140, font=input_font,
+                                 fg_color=button_color, border_width=3)
+    confirm_button_2.grid(row=1, column=2, pady=20)
+
+    current_and_passed_customers()
 
 
 window = CTk()
