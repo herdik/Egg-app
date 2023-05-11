@@ -182,7 +182,7 @@ def check_all_existing_files():
 
     while checked_year > 2021:
         for one_month in reversed(my_calendar):
-            checked_month = my_calendar[one_month]
+            checked_month = my_calendar[one_month].lower()
             try:
                 with open(f"{checked_month + str(checked_year)}.txt", mode="r") as file:
                     # print(f"{checked_month + str(checked_year)}")
@@ -651,6 +651,12 @@ def customers_overview():
 
     def current_and_passed_customers():
         global my_calendar
+        checking_year = current_year_fun()
+
+        # while checking_year > 2021:
+        #     for month in reversed(my_calendar):
+        #         checking_month = my_calendar[month]
+        #         print(checking_month)
 
     customers_window = CTkToplevel()
     customers_window.geometry("840x632+400+280")
