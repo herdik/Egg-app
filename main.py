@@ -30,7 +30,6 @@ months_options = [
 
 items_options = []
 customers_options = []
-current_passed_customers_options = []
 
 my_calendar = {
         1: "Január",
@@ -652,11 +651,29 @@ def customers_overview():
     def current_and_passed_customers():
         global my_calendar
         checking_year = current_year_fun()
+        one_line_values = []
+        current_passed_customers_options = []
 
-        # while checking_year > 2021:
-        #     for month in reversed(my_calendar):
-        #         checking_month = my_calendar[month]
-        #         print(checking_month)
+        while checking_year > 2021:
+            for month in reversed(my_calendar):
+                checking_month = my_calendar[month].lower()
+                try:
+                    with open(checking_month + str(checking_year) + str(".txt"), mode="r") as file:
+                        for one_line in file:
+                            striped_line = one_line.strip("\n")
+                            one_line_values.append(striped_line)
+                            if len(one_line_values) == 3:
+                                txt = one_line_values[1].split("-")
+                                if len(txt) == 2:
+                                    if txt[1] != "Výdavok":
+                                        current_passed_customers_options.append(txt[1])
+                                one_line_values.clear()
+                except:
+                    pass
+            checking_year -= 1
+        current_passed_customers_options = list(set(current_passed_customers_options))
+
+        return current_passed_customers_options
 
     customers_window = CTkToplevel()
     customers_window.geometry("840x632+400+280")
@@ -692,7 +709,7 @@ def customers_overview():
 
     # Year options to choose customers overview
     drop_down_customer_options = CTkOptionMenu(first_frame_customers_window,
-                                               values=current_passed_customers_options,
+                                               values=current_and_passed_customers(),
                                                fg_color=button_color, button_color="#3d345f")
 
     drop_down_customer_options.set("Žiaden zákazník")
