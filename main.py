@@ -664,9 +664,9 @@ def customers_overview():
                             one_line_values.append(striped_line)
                             if len(one_line_values) == 3:
                                 txt = one_line_values[1].split("-")
-                                if len(txt) == 2:
-                                    if txt[1] != "Výdavok":
-                                        current_passed_customers_options.append(txt[1])
+                                if len(txt) > 1:
+                                    if txt[len(txt)-1] != "Výdavok":
+                                        current_passed_customers_options.append(txt[len(txt)-1])
                                 one_line_values.clear()
                 except:
                     pass
@@ -675,15 +675,59 @@ def customers_overview():
 
         return current_passed_customers_options
 
+    def clear_table_customers_overview():
+        all_items = table_customers_overview.get_children()
+        for item in all_items:
+            table_customers_overview.delete(item)
+
+    def table_customers_overview_fill_up():
+        clear_table_customers_overview()
+        global my_calendar
+        item_index = 0
+        year_to_check = drop_down_customers_year.get()
+        customer_to_check = drop_down_customer_options.get()
+        line_values = []
+
+        for one_month in my_calendar:
+            month_to_check = my_calendar[one_month].lower()
+            try:
+                with open(str(month_to_check) + str(year_to_check) + ".txt", mode="r") as file:
+                    for one_line in file:
+                        line_to_check = one_line.strip("\n")
+                        line_values.append(line_to_check)
+                        if len(line_values) == 3:
+                            customer = line_values[1].split("-")
+                            if customer[len(customer)-1] == customer_to_check:
+                                table_date = line_values[0]
+                                table_item_customer = line_values[1]
+                                table_price = line_values[2]
+                                if item_index % 2 != 0:
+                                    table_customers_overview.insert(parent="", index=END, iid=f"{item_index}", text="",
+                                                                    values=(f"{table_date}", f"{table_item_customer}",
+                                                                            f"{table_price}"), tags=("even",))
+                                else:
+                                    table_customers_overview.insert(parent="", index=END, iid=f"{item_index}", text="",
+                                                                    values=(f"{table_date}", f"{table_item_customer}",
+                                                                            f"{table_price}"), tags=("odd", ))
+                                item_index += 1
+                            line_values.clear()
+                            customer.clear()
+            except:
+                pass
+
     customers_window = CTkToplevel()
     customers_window.geometry("840x632+400+280")
     customers_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
     customers_window.iconbitmap("icon.ico")
     customers_window.resizable(False, False)
     customers_window.grab_set()
-    # Frame
+
+    # Frames
     first_frame_customers_window = CTkFrame(customers_window, fg_color="transparent")
     first_frame_customers_window.pack(pady=30)
+
+    table_frame_customers_window = CTkFrame(customers_window, fg_color="transparent")
+    table_frame_customers_window.pack()
 
     # Label for choose year
     choose_year_label = CTkLabel(first_frame_customers_window, width=150, text="Potvrď výber roku",
@@ -717,10 +761,39 @@ def customers_overview():
 
     # Confirm button to show customer overview table
     confirm_button_2 = CTkButton(first_frame_customers_window, text="Potvrdiť", width=140, font=input_font,
-                                 fg_color=button_color, border_width=3)
+                                 fg_color=button_color, border_width=3, command=table_customers_overview_fill_up)
     confirm_button_2.grid(row=1, column=2, pady=20)
 
-    current_and_passed_customers()
+    # TABLE - Begining
+    # table for customers overview
+    table_customers_overview = ttk.Treeview(table_frame_customers_window)
+
+    # creating colums
+    table_customers_overview["columns"] = ("Dátum", "Položka - Zákazník", "Cena")
+    # config colums
+    table_customers_overview.column("#0", width=0, stretch=NO)
+    table_customers_overview.column("Dátum", anchor=W, width=100, minwidth=50)
+    table_customers_overview.column("Položka - Zákazník", anchor=CENTER, width=340, minwidth=160)
+    table_customers_overview.column("Cena", anchor=CENTER, width=120, minwidth=50)
+
+    # config heading
+    table_customers_overview.heading("#0", text="")
+    table_customers_overview.heading("Dátum", text="Dátum", anchor=W)
+    table_customers_overview.heading("Položka - Zákazník", text="Položka - Zákazník", anchor=CENTER)
+    table_customers_overview.heading("Cena", text="Cena", anchor=CENTER)
+
+    # config background added items to table_customers_overview
+    table_customers_overview.tag_configure("even", background="#218727")
+    table_customers_overview.tag_configure("odd", background="#0a270b")
+
+    table_customers_overview.grid(row=0, column=0)
+
+    # Scrollbar for table_customers_overview
+    scrollbar_table_customers_overview = CTkScrollbar(table_frame_customers_window,
+                                                      command=table_customers_overview.yview)
+    scrollbar_table_customers_overview.grid(row=0, column=1, sticky=N+S)
+    table_customers_overview.configure(yscrollcommand=scrollbar_table_customers_overview.set)
+    # TABLE - END
 
 
 window = CTk()
@@ -902,7 +975,7 @@ table.heading("Dátum", text="Dátum", anchor=W)
 table.heading("Názov položky", text="Názov položky", anchor=CENTER)
 table.heading("Cena", text="Cena", anchor=CENTER)
 
-# *******vytvorenie dvojfarebných riadkov v tabuľke*******
+"Položka - Zákazník"
 table.tag_configure("minus", background="#d00")
 table.tag_configure("plus", background="#218727")
 
