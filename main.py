@@ -681,16 +681,28 @@ def customers_overview():
             table_customers_overview.delete(item)
 
     # Delete all labels from labels frame - labels items, choosed_customer_overview_frame - finally result
-    def clear():
+    # Reset all label grid position to none
+    def clear_labels_frame():
         list_labels = labels_frame.grid_slaves()
-        list_results = choosed_customer_overview_frame.grid_slaves()
-        for first, second in zip(list_labels, list_results):
+        for first in list_labels:
             first.destroy()
+
+    def clear_result_summary_label():
+        list_results = choosed_customer_overview_frame.grid_slaves()
+        for second in list_results:
             second.destroy()
+
+    # def clear():
+    #     list_labels = labels_frame.grid_slaves()
+    #     list_results = choosed_customer_overview_frame.grid_slaves()
+    #     for first, second in zip(list_labels, list_results):
+    #         first.destroy()
+    #         second.destroy()
 
     def table_customers_overview_fill_up():
         clear_table_customers_overview()
-        clear()
+        clear_labels_frame()
+        clear_result_summary_label()
 
         global my_calendar
         item_index = 0
@@ -736,21 +748,6 @@ def customers_overview():
             except:
                 pass
 
-        # # Default setting for all labels
-        # for i in range(0, 10):
-        #     if i < 5:
-        #         CTkLabel(labels_frame, text="", width=150,
-        #                  font=bottom_label_font).grid(row=0, column=i, padx=8, pady=15)
-        #         CTkLabel(labels_frame, text="", width=80,
-        #                  font=bottom_label_font).grid(row=1, column=i)
-        #     elif 5 <= i < 10:
-        #         for i_2 in range(0, 5):
-        #             CTkLabel(labels_frame, text="", width=150,
-        #                      font=bottom_label_font).grid(row=2, column=i_2, padx=8, pady=15)
-        #             CTkLabel(labels_frame, text="", width=80,
-        #                      font=bottom_label_font).grid(row=3, column=i_2)
-        # Show items and value to labels under the table
-
         valid_item = []
         for key in all_items_dict:
             if all_items_dict[key] > 0:
@@ -770,18 +767,28 @@ def customers_overview():
                                      font=bottom_label_font).grid(row=2, column=i_2, padx=8, pady=15)
                             CTkLabel(labels_frame, text=str(valid_item[i][1]), width=80, fg_color="green",
                                      font=bottom_label_font).grid(row=3, column=i_2)
+
+        # Empty table and fix bug after if table are filled up and after chosed customer without any order - empty table
+        my_labels = 0
+        for key in all_items_dict:
+            if all_items_dict[key] == 0:
+                my_labels += 1
+        if my_labels == len(all_items_dict):
+            clear_labels_frame()
+
+        # Show finnaly result labels summary order and customer
         summary = 0
         for i in range(len(valid_item)):
             summary += valid_item[i][1]
             if str(summary).endswith(".0"):
                 summary = int(summary)
-        CTkLabel(choosed_customer_overview_frame, text=f"{customer_to_check} za rok {year_to_check}", width=250,
+        CTkLabel(choosed_customer_overview_frame, text=f"{customer_to_check} za rok {year_to_check}", width=350,
                  font=main_font).grid(row=0, column=0, padx=8, pady=(35, 5))
         CTkLabel(choosed_customer_overview_frame, text=str(summary), width=100, fg_color="green",
                  font=main_font).grid(row=1, column=0, padx=8, pady=(5, 5))
 
     customers_window = CTkToplevel()
-    customers_window.geometry("840x732+400+280")
+    customers_window.geometry("840x832+400+280")
     customers_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
     customers_window.iconbitmap("icon.ico")
     customers_window.resizable(False, False)
