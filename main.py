@@ -7,7 +7,6 @@ from matplotlib.figure import Figure
 import numpy as np
 
 
-input_test = ""
 current_dato = time.localtime()
 monthly_profit = 0
 monthly_losses = 0
@@ -675,18 +674,34 @@ def customers_overview():
 
         return current_passed_customers_options
 
+    # Delete all customers and items from table treeview
     def clear_table_customers_overview():
         all_items = table_customers_overview.get_children()
         for item in all_items:
             table_customers_overview.delete(item)
 
+    # Delete all labels from labels frame - labels items, choosed_customer_overview_frame - finally result
+    def clear():
+        list_labels = labels_frame.grid_slaves()
+        list_results = choosed_customer_overview_frame.grid_slaves()
+        for first, second in zip(list_labels, list_results):
+            first.destroy()
+            second.destroy()
+
     def table_customers_overview_fill_up():
         clear_table_customers_overview()
+        clear()
+
         global my_calendar
         item_index = 0
         year_to_check = drop_down_customers_year.get()
         customer_to_check = drop_down_customer_options.get()
         line_values = []
+        all_items_dict = {}
+
+        # creating dictionary to fill up according customer and his ordered items
+        for one_item in items_options:
+            all_items_dict[one_item] = 0
 
         for one_month in my_calendar:
             month_to_check = my_calendar[one_month].lower()
@@ -701,6 +716,12 @@ def customers_overview():
                                 table_date = line_values[0]
                                 table_item_customer = line_values[1]
                                 table_price = line_values[2]
+                                checking_item = line_values[1].replace(str("-") + customer[len(customer)-1], "")
+
+                                for key in all_items_dict:
+                                    if key == checking_item:
+                                        all_items_dict[key] += float(table_price)
+
                                 if item_index % 2 != 0:
                                     table_customers_overview.insert(parent="", index=END, iid=f"{item_index}", text="",
                                                                     values=(f"{table_date}", f"{table_item_customer}",
@@ -715,8 +736,52 @@ def customers_overview():
             except:
                 pass
 
+        # # Default setting for all labels
+        # for i in range(0, 10):
+        #     if i < 5:
+        #         CTkLabel(labels_frame, text="", width=150,
+        #                  font=bottom_label_font).grid(row=0, column=i, padx=8, pady=15)
+        #         CTkLabel(labels_frame, text="", width=80,
+        #                  font=bottom_label_font).grid(row=1, column=i)
+        #     elif 5 <= i < 10:
+        #         for i_2 in range(0, 5):
+        #             CTkLabel(labels_frame, text="", width=150,
+        #                      font=bottom_label_font).grid(row=2, column=i_2, padx=8, pady=15)
+        #             CTkLabel(labels_frame, text="", width=80,
+        #                      font=bottom_label_font).grid(row=3, column=i_2)
+        # Show items and value to labels under the table
+
+        valid_item = []
+        for key in all_items_dict:
+            if all_items_dict[key] > 0:
+                if str(all_items_dict[key]).endswith(".0"):
+                    all_items_dict[key] = int(all_items_dict[key])
+                valid_item.append([key, all_items_dict[key]])
+
+                for i in range(0, len(valid_item)):
+                    if i < 5:
+                        CTkLabel(labels_frame, text=valid_item[i][0], width=150,
+                                 font=bottom_label_font).grid(row=0, column=i, padx=8, pady=15)
+                        CTkLabel(labels_frame, text=str(valid_item[i][1]), width=80, fg_color="green",
+                                 font=bottom_label_font).grid(row=1, column=i)
+                    elif 5 <= i < 10:
+                        for i_2 in range(0, 5):
+                            CTkLabel(labels_frame, text=valid_item[i][0], width=150,
+                                     font=bottom_label_font).grid(row=2, column=i_2, padx=8, pady=15)
+                            CTkLabel(labels_frame, text=str(valid_item[i][1]), width=80, fg_color="green",
+                                     font=bottom_label_font).grid(row=3, column=i_2)
+        summary = 0
+        for i in range(len(valid_item)):
+            summary += valid_item[i][1]
+            if str(summary).endswith(".0"):
+                summary = int(summary)
+        CTkLabel(choosed_customer_overview_frame, text=f"{customer_to_check} za rok {year_to_check}", width=250,
+                 font=main_font).grid(row=0, column=0, padx=8, pady=(35, 5))
+        CTkLabel(choosed_customer_overview_frame, text=str(summary), width=100, fg_color="green",
+                 font=main_font).grid(row=1, column=0, padx=8, pady=(5, 5))
+
     customers_window = CTkToplevel()
-    customers_window.geometry("840x632+400+280")
+    customers_window.geometry("840x732+400+280")
     customers_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
     customers_window.iconbitmap("icon.ico")
     customers_window.resizable(False, False)
@@ -729,6 +794,12 @@ def customers_overview():
     table_frame_customers_window = CTkFrame(customers_window, fg_color="transparent")
     table_frame_customers_window.pack()
 
+    labels_frame = CTkFrame(customers_window, fg_color="transparent")
+    labels_frame.pack()
+
+    choosed_customer_overview_frame = CTkFrame(customers_window, fg_color="transparent")
+    choosed_customer_overview_frame.pack()
+
     # Label for choose year
     choose_year_label = CTkLabel(first_frame_customers_window, width=150, text="Potvrď výber roku",
                                  font=bottom_label_font)
@@ -740,11 +811,6 @@ def customers_overview():
                                              button_color="#3d345f")
     drop_down_customers_year.set(current_year_fun())
     drop_down_customers_year.grid(row=0, column=1, padx=10)
-
-    # Confirm button to select year for customers options fill up
-    confirm_button = CTkButton(first_frame_customers_window, text="Potvrdiť", width=140, font=input_font,
-                               fg_color=button_color, border_width=3)
-    confirm_button.grid(row=0, column=2)
 
     # Label for choose customer in selected year
     choose_customer_label = CTkLabel(first_frame_customers_window, width=150, text="Vyber zákazníka",
