@@ -5,6 +5,8 @@ from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import numpy as np
+from tkcalendar import DateEntry
+from datetime import date
 
 
 current_dato = time.localtime()
@@ -982,9 +984,27 @@ final_profit.grid(row=0, column=2, padx=(240, 450), ipadx=20)
 
 # TABLE ITEMS FRAME
 # Date input
-input_date = CTkEntry(table_items_frame, width=87, font=input_font, border_width=3)
-input_date.insert(0, current_date_numbers_for_input_date())
-input_date.grid(row=0, column=0)
+# input_date = CTkEntry(table_items_frame, width=87, font=input_font, border_width=3)
+# input_date.insert(0, current_date_numbers_for_input_date())
+# input_date.grid(row=0, column=0)
+
+style_date = ttk.Style()
+style_date.theme_use('clam')  # -> uncomment this line if the styling does not work
+style_date.configure('my.DateEntry',
+                     fieldbackground=button_color,
+                     background='transparent',
+                     foreground="#fff",
+                     arrowcolor="#fff",
+                     bordercolor='purple',
+                     insertcolor="#6f6f6f",)
+style_date.map('my.DateEntry',
+               background=[('!active', '#3d345f'), ('pressed', '#203A4F'), ('active', '#3d345f')])
+
+
+input_date = DateEntry(table_items_frame, selectmode="day", date_pattern="d.m.y", style='my.DateEntry',
+                       font=("Century Gothic", 11), locale="sk",
+                       mindate=date(2022, 1, 1), background='#3d345f', foreground="white", selectbackground='#3d345f')
+input_date.grid(row=0, column=0, ipady=1)
 
 drop_down_table_items = CTkOptionMenu(table_items_frame, values=all_options_to_drop_down_table_items(),
                                       fg_color=button_color,
