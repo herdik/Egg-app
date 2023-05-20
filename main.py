@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 import numpy as np
 from tkcalendar import DateEntry
 from datetime import date
+from datetime import datetime
 
 
 current_dato = time.localtime()
@@ -360,22 +361,22 @@ def sort_out_table_by_date():
     my_items = table.get_children()
     for one_item in my_items:
         first_item = str(table.item(one_item)["values"][0])
-        first_item = change_date_or_add_zero_to_date(first_item)
+        # first_item = change_date_or_add_zero_to_date(first_item)
         second_item = str(table.item(one_item)["values"][1])
         third_item = str(table.item(one_item)["values"][2])
         checking_table.append((first_item, second_item, third_item))
     # usportiadanie podľa dátumu u listu podľa 0-tého parametru z tuple
-    checking_table.sort(key=lambda x: x[0])
+    checking_table.sort(key=lambda x: datetime.strptime(x[0], "%d.%m.%Y"))
     clear_table()
     for index in range(len(checking_table)):
-        modified_date = change_date_or_remove_zero_to_date(checking_table[index][0])
+        # modified_date = change_date_or_remove_zero_to_date(checking_table[index][0])
         if float(checking_table[index][2]) >= 0:
-            table.insert(parent="", index=END, iid=f"{index}", text="", values=(modified_date,
+            table.insert(parent="", index=END, iid=f"{index}", text="", values=(checking_table[index][0],
                                                                                 checking_table[index][1],
                                                                                 checking_table[index][2]),
                          tags=("plus",))
         else:
-            table.insert(parent="", index=END, iid=f"{index}", text="", values=(modified_date,
+            table.insert(parent="", index=END, iid=f"{index}", text="", values=(checking_table[index][0],
                                                                                 checking_table[index][1],
                                                                                 checking_table[index][2]),
                          tags=("minus",))
@@ -556,25 +557,25 @@ def pie_graph_call(profit_graph, losses_graph):
         canvas.get_tk_widget().grid(row=0, column=2)
 
 
-def change_date_or_add_zero_to_date(check_text):
-    new_text = "0"
-    date_index = check_text.find(".")
-    if date_index == 1:
-        for symbol in check_text:
-            new_text += symbol
-    else:
-        new_text = check_text
-    return new_text
+# def change_date_or_add_zero_to_date(check_text):
+#     new_text = "0"
+#     date_index = check_text.find(".")
+#     if date_index == 1:
+#         for symbol in check_text:
+#             new_text += symbol
+#     else:
+#         new_text = check_text
+#     return new_text
 
 
-def change_date_or_remove_zero_to_date(check_text):
-    new_text = ""
-    if check_text[0] == "0":
-        for index in range(1, len(check_text)):
-            new_text += check_text[index]
-    else:
-        new_text = check_text
-    return new_text
+# def change_date_or_remove_zero_to_date(check_text):
+#     new_text = ""
+#     if check_text[0] == "0":
+#         for index in range(1, len(check_text)):
+#             new_text += check_text[index]
+#     else:
+#         new_text = check_text
+#     return new_text
 
 
 def bar_graph_values_update():
