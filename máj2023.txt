@@ -1,6 +1,3 @@
-5.5.2023
-Dezinfekcia-Vıdavok
--6.5
 6.5.2023
 Vajíèka-Stankoví
 12
@@ -10,6 +7,9 @@ Vajíèka-Maja Kuèerková
 6.5.2023
 Mäso na polievku-Mikulášoví
 30
+8.5.2023
+Mäso na polievku-Stankoví
+2
 11.5.2023
 Zemiaky-krmné-Vıdavok
 -6
@@ -22,3 +22,6 @@ Vajíèka-Emil Ïurák
 19.05.2023
 Vajíèka-Stankoví
 6
+20.5.2023
+Mäso na polievku-Stankoví
+12

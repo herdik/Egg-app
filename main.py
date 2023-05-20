@@ -116,9 +116,9 @@ def add_items_press_button_add_item():
     input_price.insert(0, "Zadaj cenu")
     input_price.configure(text_color=temporary_input_font_color)
     current_month_label.focus()
-    input_date.delete(0, END)
-    input_date.set_date(date(int(drop_down_year.get()), current_date_numbers_for_input_date()[1],
-                             current_date_numbers_for_input_date()[2]))
+    # input_date.delete(0, END)
+    # input_date.set_date(date(int(drop_down_year.get()), current_date_numbers_for_input_date()[1],
+    #                          current_date_numbers_for_input_date()[2]))
     sort_out_table_by_date()
     id_item += 1
 
