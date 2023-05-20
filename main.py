@@ -790,18 +790,19 @@ def customers_overview():
                     all_items_dict[key] = int(all_items_dict[key])
                 valid_item.append([key, all_items_dict[key]])
 
-                for i in range(0, len(valid_item)):
-                    if i < 5:
-                        CTkLabel(labels_frame, text=valid_item[i][0], width=150,
-                                 font=bottom_label_font).grid(row=0, column=i, padx=8, pady=15)
-                        CTkLabel(labels_frame, text=str(valid_item[i][1]), width=80, fg_color="green",
-                                 font=bottom_label_font).grid(row=1, column=i)
-                    elif 5 <= i < 10:
-                        for i_2 in range(0, 5):
-                            CTkLabel(labels_frame, text=valid_item[i][0], width=150,
-                                     font=bottom_label_font).grid(row=2, column=i_2, padx=8, pady=15)
-                            CTkLabel(labels_frame, text=str(valid_item[i][1]), width=80, fg_color="green",
-                                     font=bottom_label_font).grid(row=3, column=i_2)
+        i_2 = 0
+        for i in range(0, len(valid_item)):
+            if i < 10:
+                CTkLabel(labels_frame, text=valid_item[i][0], width=150,
+                         font=bottom_label_font).grid(row=0, column=i, padx=8, pady=15)
+                CTkLabel(labels_frame, text=str(valid_item[i][1]), width=80, fg_color="green",
+                         font=bottom_label_font).grid(row=1, column=i)
+            if 5 <= i < 10:
+                CTkLabel(labels_frame, text=valid_item[i][0], width=150,
+                         font=bottom_label_font).grid(row=2, column=i_2, padx=8, pady=15)
+                CTkLabel(labels_frame, text=str(valid_item[i][1]), width=80, fg_color="green",
+                         font=bottom_label_font).grid(row=3, column=i_2)
+                i_2 += 1
 
         # Empty table and fix bug after if table are filled up and after chosed customer without any order - empty table
         my_labels = 0
@@ -823,7 +824,7 @@ def customers_overview():
                  font=main_font).grid(row=1, column=0, padx=8, pady=(5, 5))
 
     customers_window = CTkToplevel()
-    customers_window.geometry("840x832+400+280")
+    customers_window.geometry("840x732+400+100")
     customers_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
     customers_window.iconbitmap("icon.ico")
     customers_window.resizable(False, False)
@@ -831,7 +832,7 @@ def customers_overview():
 
     # Frames
     first_frame_customers_window = CTkFrame(customers_window, fg_color="transparent")
-    first_frame_customers_window.pack(pady=30)
+    first_frame_customers_window.pack(pady=12)
 
     table_frame_customers_window = CTkFrame(customers_window, fg_color="transparent")
     table_frame_customers_window.pack()
@@ -857,7 +858,7 @@ def customers_overview():
     # Label for choose customer in selected year
     choose_customer_label = CTkLabel(first_frame_customers_window, width=150, text="Vyber zákazníka",
                                      font=bottom_label_font)
-    choose_customer_label.grid(row=1, column=0, pady=20)
+    choose_customer_label.grid(row=1, column=0, pady=10)
 
     # Year options to choose customers overview
     drop_down_customer_options = CTkOptionMenu(first_frame_customers_window,
@@ -865,12 +866,12 @@ def customers_overview():
                                                fg_color=button_color, button_color="#3d345f")
 
     drop_down_customer_options.set("Žiaden zákazník")
-    drop_down_customer_options.grid(row=1, column=1, padx=10, pady=20)
+    drop_down_customer_options.grid(row=1, column=1, padx=10, pady=10)
 
     # Confirm button to show customer overview table
     confirm_button_2 = CTkButton(first_frame_customers_window, text="Potvrdiť", width=140, font=input_font,
                                  fg_color=button_color, border_width=3, command=table_customers_overview_fill_up)
-    confirm_button_2.grid(row=1, column=2, pady=20)
+    confirm_button_2.grid(row=1, column=2, pady=10)
 
     # TABLE - Begining
     # table for customers overview
@@ -953,16 +954,16 @@ bottom_frame.pack()
 # ===============
 
 # Label Current month label
-current_month_label = CTkLabel(head_frame, text="Aktuálny mesiac", font=main_font)
-current_month_label.grid(row=0, column=0)
+current_month_label = CTkLabel(head_frame, text="Aktuálny mesiac", font=main_font, width=205)
+current_month_label.grid(row=0, column=0, ipadx=3, padx=(50, 0))
 
 # Label Profit a losses
-profit_and_losses_label = CTkLabel(head_frame, text="Celkové ročný obrat", font=main_font)
-profit_and_losses_label.grid(row=0, column=1, padx=(300, 80))
+profit_and_losses_label = CTkLabel(head_frame, text="Celkové ročný obrat", font=main_font, width=255)
+profit_and_losses_label.grid(row=0, column=1, padx=(220, 80), ipadx=3)
 
 # Label Year overview of profit and losses
-year_overview_profit_and_losses = CTkLabel(head_frame, text="Mesačný prehľad", font=main_font)
-year_overview_profit_and_losses.grid(row=0, column=2, padx=(80, 130))
+year_overview_profit_and_losses = CTkLabel(head_frame, text="Mesačný prehľad", font=main_font, width=220)
+year_overview_profit_and_losses.grid(row=0, column=2, padx=(80, 130), ipadx=3)
 # HEAD FRAME END
 
 # HEAD FRAME
@@ -974,13 +975,13 @@ drop_down_month.set(current_month_fun())
 drop_down_month.grid(row=0, column=0, padx=(30, 10))
 
 # Label of profit
-profit_label = CTkLabel(second_frame, text=f"Príjmy         0", font=main_font)
+profit_label = CTkLabel(second_frame, text=f"Príjmy         0", font=main_font, width=200)
 # profit_label.grid(row=1, column=2, padx=(300, 80))
-profit_label.grid(row=0, column=3, padx=(140, 0))
+profit_label.grid(row=0, column=3, padx=(140, 0), ipadx=8)
 
 # Label of losses
-losses_label = CTkLabel(second_frame, text=f"Výdavky    0", font=main_font)
-losses_label.grid(row=1, column=3, padx=(140, 0))
+losses_label = CTkLabel(second_frame, text=f"Výdavky    0", font=main_font, width=200)
+losses_label.grid(row=1, column=3, padx=(140, 0), ipadx=8)
 
 drop_down_year = CTkOptionMenu(second_frame, values=check_all_existing_files(), fg_color=button_color,
                                button_color="#3d345f")
@@ -988,9 +989,9 @@ drop_down_year.set(current_year_fun())
 drop_down_year.grid(row=0, column=1)
 
 # Label current year
-current_year_label = CTkLabel(second_frame, text=f"Rok  {current_year_fun()}", font=main_font)
+current_year_label = CTkLabel(second_frame, text=f"Rok  {current_year_fun()}", font=main_font, width=120)
 # current_year_label.grid(row=1, column=3, padx=(80, 50))
-current_year_label.grid(row=0, column=4, padx=(260, 170))
+current_year_label.grid(row=0, column=4, padx=(240, 180))
 
 # Confirm button
 button_confirm_choose_file = CTkButton(second_frame, text="Vybrať", width=140, font=input_font,
