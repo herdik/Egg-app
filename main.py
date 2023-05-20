@@ -89,9 +89,9 @@ def current_date_numbers_for_input_date():
     return current_dato[0], current_dato[1], current_dato[2]
 
 
-def clicked_input_price_fun(e):
-    input_price.delete(0, END)
-    input_price.configure(text_color=text_color_input)
+# def clicked_input_price_fun(e):
+#     input_price.delete(0, END)
+#     input_price.configure(text_color=text_color_input)
 
 
 def add_items_press_button_add_item():
@@ -417,9 +417,16 @@ def update_monthly_profit_losses():
 
 def window_settings():
     # funckie pre vymazanie textu po kliknutí
-    def click_input_item_fun(e):
-        input_item.delete(0, END)
-        input_item.configure(text_color=text_color_input)
+    # def click_input_item_fun(e):
+    #     input_item.delete(0, END)
+    #     input_item.configure(text_color=text_color_input)
+
+    def delete_placeholder_input_item():
+        if len(input_item.get()) > 0:
+            hidden_label_input_item.grid_forget()
+        else:
+            hidden_label_input_item.configure(text="Zadaj položku/zákazníka")
+            hidden_label_input_item.grid_configure(row=0, column=1)
 
     # pridanie položky aleno zákazníka do Options menu
     def add_new_option_to_drop_down_table_items_or_new_customer():
@@ -476,10 +483,18 @@ def window_settings():
     drop_down_customer_or_new_item.grid(row=0, column=0)
 
     # Item input
-    input_item = CTkEntry(first_toplevel_frame, width=185, font=input_font, border_width=3,
-                          text_color=temporary_input_font_color)
-    input_item.insert(0, "Zadaj položku/zákazníka")
-    input_item.grid(row=0, column=1, padx=10)
+    input_item = CTkEntry(first_toplevel_frame, width=160, font=input_font, border_width=3,
+                          text_color=text_color_input, fg_color="#343638")
+    # input_item.insert(0, "Zadaj položku/zákazníka")
+    input_item.grid(row=0, column=1, padx=10, ipadx=2)
+
+    input_item.bind('<KeyRelease>', lambda e: delete_placeholder_input_item())
+
+    # placeholder fo input_item
+    hidden_label_input_item = CTkLabel(first_toplevel_frame, width=141, height=8, text="Zadaj položku/zákazníka",
+                                       text_color=temporary_input_font_color, fg_color="#343638")
+    hidden_label_input_item.grid(row=0, column=1)
+    hidden_label_input_item.bind('<Button-1>', lambda e: input_item.focus())
 
     # Button Add item
     button_add_option = CTkButton(first_toplevel_frame, text="Pridaj", width=100, font=input_font,
@@ -488,7 +503,7 @@ def window_settings():
     button_add_option.grid(row=0, column=2)
 
     # Bind the Entry widget with Mouse Button to clear the content
-    input_item.bind("<FocusIn>", click_input_item_fun)
+    # input_item.bind("<FocusIn>", click_input_item_fun)
 
     # Customer/Losses Options Menu
     drop_down_customer_losses_2 = CTkOptionMenu(first_toplevel_frame,
@@ -906,6 +921,15 @@ def customers_overview():
     # TABLE - END
 
 
+def delete_placeholder():
+    if len(input_price.get()) > 0:
+        hidden_label_input_price.grid_forget()
+        input_price.configure(text_color=text_color_input)
+    else:
+        hidden_label_input_price.configure(text="Zadaj cenu")
+        hidden_label_input_price.grid_configure(row=0, column=2)
+
+
 window = CTk()
 window.geometry("1360x732+100+100")
 window.title("Velušovské vajíčko 1.0")
@@ -1038,7 +1062,8 @@ style_date.map('my.DateEntry',
 
 input_date = DateEntry(table_items_frame, selectmode="day", date_pattern="d.m.y", style='my.DateEntry',
                        font=("Century Gothic", 11), locale="sk",
-                       mindate=date(2021, 12, 31), background='#3d345f', foreground="white", selectbackground='#3d345f')
+                       mindate=date(2021, 12, 31), background='#3d345f', foreground="white", selectbackground='#3d345f',
+                       justify="center")
 input_date.set_date(date(int(drop_down_year.get()), current_date_numbers_for_input_date()[1],
                     current_date_numbers_for_input_date()[2]))
 input_date.grid(row=0, column=0, ipady=1)
@@ -1050,9 +1075,16 @@ drop_down_table_items.grid(row=0, column=1, padx=10)
 
 # Price input
 input_price = CTkEntry(table_items_frame, width=100, font=input_font, border_width=3,
-                       text_color=temporary_input_font_color)
-input_price.insert(0, "Zadaj cenu")
-input_price.grid(row=0, column=2)
+                       text_color=text_color_input)
+# input_price.insert(0, "Zadaj cenu")
+input_price.grid(row=0, column=2, ipadx=2)
+input_price.bind('<KeyRelease>', lambda e: delete_placeholder())
+
+# placeholder for input price
+hidden_label_input_price = CTkLabel(table_items_frame, font=input_font, text_color=temporary_input_font_color,
+                                    fg_color="#343638", text="Zadaj cenu", height=8, width=80)
+hidden_label_input_price.grid(row=0, column=2)
+hidden_label_input_price.bind('<Button-1>', lambda e: input_price.focus())
 
 # Button Add item
 button_add_item = CTkButton(table_items_frame, text="Pridaj položku", width=50, font=input_font, fg_color=button_color,
@@ -1067,7 +1099,7 @@ value_final_profit.grid(row=0, column=4, padx=(170, 550))
 
 # Bind the Entry widget with Mouse Button to clear the content
 
-clicked_input_price = input_price.bind("<FocusIn>", clicked_input_price_fun)
+# clicked_input_price = input_price.bind("<FocusIn>", clicked_input_price_fun)
 
 # ====== Graphics Frame =======
 # TABLE treeview
