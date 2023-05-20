@@ -48,6 +48,27 @@ my_calendar = {
     }
 
 
+def return_number_of_month():
+    global my_calendar
+    # my_calendar_number = {
+    #         "Január": 1,
+    #         "Február": 2,
+    #         "Marec": 3,
+    #         "Apríl": 4,
+    #         "Máj": 5,
+    #         "Jún": 6,
+    #         "Júl": 7,
+    #         "August": 8,
+    #         "September": 9,
+    #         "Október": 10,
+    #         "November": 11,
+    #         "December": 12
+    #     }
+    for key in my_calendar:
+        if drop_down_month.get() == my_calendar[key]:
+            return key
+
+
 # funckia pre aktuálny rok
 def current_year_fun():
     current_year = current_dato[0]
@@ -64,8 +85,7 @@ def current_month_fun():
 
 # funckia pre dátum pre entry a vloženie do tabuľky
 def current_date_numbers_for_input_date():
-    current_day = f"{current_dato[2]}.{current_dato[1]}.{current_dato[0]}"
-    return current_day
+    return current_dato[0], current_dato[1], current_dato[2]
 
 
 def clicked_input_price_fun(e):
@@ -97,8 +117,10 @@ def add_items_press_button_add_item():
     input_price.configure(text_color=temporary_input_font_color)
     current_month_label.focus()
     input_date.delete(0, END)
-    input_date.insert(0, current_date_numbers_for_input_date())
+    input_date.set_date(date(int(drop_down_year.get()), current_date_numbers_for_input_date()[1],
+                             current_date_numbers_for_input_date()[2]))
     sort_out_table_by_date()
+    id_item += 1
 
 
 def delete_item_line_from_table():
@@ -143,31 +165,31 @@ def save_file_fun():
                     file.write(third_item + "\n")
 
 
-def reopen_saved_file():
-    global id_item
-    count = 0
-    data = []
-    data_values = []
-    try:
-        with open(f"{current_month_fun().lower() + str(current_year_fun())}.txt", mode="r") as file:
-            for one_line in file:
-                one_line = one_line.strip("\n")
-                data_values.append(one_line)
-                if len(data_values) == 3:
-                    data.append(data_values)
-                    data_values = []
-                    if float(data[count][2]) < 0:
-                        table.insert(parent="", index=END, iid=f"{id_item}", text="",
-                                     values=(data[count][0], data[count][1], data[count][2]), tags=("minus", ))
-                    elif float(data[count][2]) > 0:
-                        table.insert(parent="", index=END, iid=f"{id_item}", text="",
-                                     values=(data[count][0], data[count][1], data[count][2]), tags=("plus",))
-                    else:
-                        pass
-                    count += 1
-                    id_item += 1
-    except:
-        print("Súbor sa nenašiel")
+# def reopen_saved_file():
+#     global id_item
+#     count = 0
+#     data = []
+#     data_values = []
+#     try:
+#         with open(f"{current_month_fun().lower() + str(current_year_fun())}.txt", mode="r") as file:
+#             for one_line in file:
+#                 one_line = one_line.strip("\n")
+#                 data_values.append(one_line)
+#                 if len(data_values) == 3:
+#                     data.append(data_values)
+#                     data_values = []
+#                     if float(data[count][2]) < 0:
+#                         table.insert(parent="", index=END, iid=f"{id_item}", text="",
+#                                      values=(data[count][0], data[count][1], data[count][2]), tags=("minus", ))
+#                     elif float(data[count][2]) > 0:
+#                         table.insert(parent="", index=END, iid=f"{id_item}", text="",
+#                                      values=(data[count][0], data[count][1], data[count][2]), tags=("plus",))
+#                     else:
+#                         pass
+#                     count += 1
+#                     id_item += 1
+#     except:
+#         print("Súbor sa nenašiel")
 
 
 def check_all_existing_files():
@@ -294,6 +316,17 @@ def open_choosed_file():
     monthly_losses_label_value.configure(text=f"{update_monthly_profit_losses()[1]}")
     final_monthly_profit_label_value.configure(text=f"{update_monthly_profit_losses()[2]}")
     value_final_profit.configure(text=f"{final_profit_sum}")
+
+    if int(drop_down_year.get()) == current_date_numbers_for_input_date()[0] \
+            and return_number_of_month() == current_date_numbers_for_input_date()[1]:
+        input_date.set_date(date(current_date_numbers_for_input_date()[0], current_date_numbers_for_input_date()[1],
+                                 current_date_numbers_for_input_date()[2]))
+    else:
+        input_date.set_date(date(int(drop_down_year.get()), return_number_of_month(),
+                                 1))
+
+    # int(drop_down_year.get()) != current_date_numbers_for_input_date()[0]:
+
     profit_graph = yearly_profit
     losses_graph = yearly_losses * -1
     pie_graph_call(profit_graph, losses_graph)
@@ -1003,7 +1036,9 @@ style_date.map('my.DateEntry',
 
 input_date = DateEntry(table_items_frame, selectmode="day", date_pattern="d.m.y", style='my.DateEntry',
                        font=("Century Gothic", 11), locale="sk",
-                       mindate=date(2022, 1, 1), background='#3d345f', foreground="white", selectbackground='#3d345f')
+                       mindate=date(2021, 12, 31), background='#3d345f', foreground="white", selectbackground='#3d345f')
+input_date.set_date(date(int(drop_down_year.get()), current_date_numbers_for_input_date()[1],
+                    current_date_numbers_for_input_date()[2]))
 input_date.grid(row=0, column=0, ipady=1)
 
 drop_down_table_items = CTkOptionMenu(table_items_frame, values=all_options_to_drop_down_table_items(),
