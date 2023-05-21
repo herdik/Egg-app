@@ -1058,6 +1058,15 @@ def event_close_main_window():
     button_no.grid(row=1, column=1, padx=10)
 
 
+def update_year_options():
+    options_years = []
+    # new_year_to_add = str(current_year_fun())
+    for one_year in range(2022, current_year_fun() + 1):
+        options_years.append(str(one_year))
+
+    return options_years
+
+
 window = CTk()
 window.geometry("1360x732+10+10")
 window.title("Velušovské vajíčko 1.0")
@@ -1136,7 +1145,7 @@ profit_label.grid(row=0, column=3, padx=(140, 0), ipadx=8)
 losses_label = CTkLabel(second_frame, text=f"Výdavky    0", font=main_font, width=200)
 losses_label.grid(row=1, column=3, padx=(140, 0), ipadx=8)
 
-drop_down_year = CTkOptionMenu(second_frame, values=check_all_existing_files(), fg_color=button_color,
+drop_down_year = CTkOptionMenu(second_frame, values=update_year_options(), fg_color=button_color,
                                button_color="#3d345f")
 drop_down_year.set(current_year_fun())
 drop_down_year.grid(row=0, column=1)
@@ -1361,6 +1370,7 @@ canvas_3.create_image(0, 0, anchor="nw", image=egg_picture)
 
 # reopen saved file
 # reopen_saved_file()
+check_all_existing_files()
 open_choosed_file()
 # calculate profit form table
 # calculate losses from table
