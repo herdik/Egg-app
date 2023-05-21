@@ -444,8 +444,12 @@ def window_settings():
             drop_down_customer_losses_2.configure(values=customers_options)
 
         input_item.delete(0, END)
-        input_item.insert(0, "Zadaj položku/zákazníka")
-        input_item.configure(text_color=temporary_input_font_color)
+        hidden_label_input_item.configure(text="Zadaj položku/zákazníka")
+        hidden_label_input_item.grid_configure(row=0, column=1)
+        input_item.bind('<KeyRelease>', lambda e: delete_placeholder_input_item())
+        hidden_label_input_item.bind('<Button-1>', lambda e: input_item.focus())
+        # input_item.insert(0, "Zadaj položku/zákazníka")
+        # input_item.configure(text_color=temporary_input_font_color)
         settings_window.focus()
 
     # Odobratie zákazníka z Options menu
