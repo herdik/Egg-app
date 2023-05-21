@@ -420,6 +420,48 @@ def update_monthly_profit_losses():
 
 
 def window_settings():
+    # Reminder to save settings
+    def reminde_window_func():
+        # Close setting window and reminde window
+        def close_settings_and_reminde_window():
+            reminde_window.destroy()
+            settings_window.destroy()
+
+        def reminde_save_changes_settings():
+            update_customers_options()
+            reminde_window.destroy()
+            settings_window.destroy()
+
+        reminde_window = CTkToplevel(window)
+        reminde_window.geometry("400x250+530+280")
+        reminde_window.title("Velušovské vajíčko 1.0 - Upozornenie")
+        reminde_window.iconbitmap("icon.ico")
+        reminde_window.resizable(False, False)
+        reminde_window.grab_set()
+
+        reminde_frame = CTkFrame(reminde_window, fg_color="transparent")
+        reminde_frame.pack()
+
+        buttons_frame_questions_window = CTkFrame(reminde_window, fg_color="transparent")
+        buttons_frame_questions_window.pack()
+
+        question_label_settings = CTkLabel(reminde_frame, width=300, text="Naozaj chcete zatvoriť okno s nastaveniami?",
+                                           text_color=text_color_input, font=input_font)
+        question_label_settings.grid(row=0, column=0, pady=(5, 10))
+
+        button_yes_close = CTkButton(reminde_frame, width=80, text="Áno", text_color=text_color_input,
+                                     fg_color=button_color, font=bottom_label_font,
+                                     command=close_settings_and_reminde_window)
+        button_yes_close.grid(row=1, column=0)
+
+        question_label_2_settings = CTkLabel(reminde_frame, width=300,
+                                             text="Ak ste nastavenia neuložili, stále ich môžete uložiť?",
+                                             text_color=text_color_input, font=input_font)
+        question_label_2_settings.grid(row=2, column=0, pady=(15, 10))
+
+        button_save = CTkButton(reminde_frame, width=80, text="Uložiť", text_color=text_color_input,
+                                fg_color=button_color, font=bottom_label_font, command=reminde_save_changes_settings)
+        button_save.grid(row=3, column=0)
     # funckie pre vymazanie textu po kliknutí
     # def click_input_item_fun(e):
     #     input_item.delete(0, END)
@@ -544,6 +586,9 @@ def window_settings():
                               fg_color=button_color,
                               border_width=3, command=update_customers_options)
     save_settings.grid(row=0, column=0, pady=(80, 10))
+
+    # Event close settings window call reminde window function
+    settings_window.protocol("WM_DELETE_WINDOW", reminde_window_func)
 
 
 def pie_graph_call(profit_graph, losses_graph):
@@ -958,6 +1003,7 @@ def event_close_main_window():
         save_questions_window.geometry("400x250+530+280")
         save_questions_window.iconbitmap("icon.ico")
         save_questions_window.title("Uloženie aplikácie")
+        save_questions_window.resizable(False, False)
         save_questions_window.grab_set()
 
         save_question_frame = CTkFrame(save_questions_window, fg_color="transparent")
@@ -990,6 +1036,7 @@ def event_close_main_window():
     questions_window.geometry("400x250+530+280")
     questions_window.iconbitmap("icon.ico")
     questions_window.title("Ukončenie aplikácie")
+    questions_window.resizable(False, False)
     questions_window.grab_set()
 
     question_frame = CTkFrame(questions_window, fg_color="transparent")
