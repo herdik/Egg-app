@@ -468,7 +468,7 @@ def window_settings():
         drop_down_table_items.configure(values=items_options)
 
     settings_window = CTkToplevel()
-    settings_window.geometry("640x366+400+280")
+    settings_window.geometry("640x366+400+190")
     settings_window.title("Velušovské vajíčko 1.0 - nastavenia")
     settings_window.iconbitmap("icon.ico")
     settings_window.resizable(False, False)
@@ -840,7 +840,7 @@ def customers_overview():
                  font=main_font).grid(row=1, column=0, padx=8, pady=(5, 5))
 
     customers_window = CTkToplevel()
-    customers_window.geometry("840x732+400+100")
+    customers_window.geometry("840x732+400+10")
     customers_window.title("Velušovské vajíčko 1.0 - Prehľad zákazníkov")
     customers_window.iconbitmap("icon.ico")
     customers_window.resizable(False, False)
@@ -930,8 +930,81 @@ def delete_placeholder():
         hidden_label_input_price.grid_configure(row=0, column=2)
 
 
+# event to CLOSE APP
+def event_close_main_window():
+    # event SAVE table
+    def event_save_table():
+        # Closing app after Saved TABLE
+        def close_app_save_table():
+            save_file_and_update_profit_and_losses()
+            save_questions_window.destroy()
+            window.destroy()
+
+        # Closing save_questions_window and continue
+        def close_save_questions_window_and_continue():
+            save_questions_window.destroy()
+
+        # Main content of event SAVE table
+        questions_window.destroy()
+        save_questions_window = CTkToplevel(window)
+        save_questions_window.geometry("400x250+530+280")
+        save_questions_window.iconbitmap("icon.ico")
+        save_questions_window.title("Uloženie aplikácie")
+        save_questions_window.grab_set()
+
+        save_question_frame = CTkFrame(save_questions_window, fg_color="transparent")
+        save_question_frame.pack()
+
+        save_buttons_frame_questions_window = CTkFrame(save_questions_window, fg_color="transparent")
+        save_buttons_frame_questions_window.pack()
+
+        save_question_label = CTkLabel(save_question_frame, width=300,
+                                       text="Chcete uložiť tabuľku a ukončiť aplikáciu?",
+                                       text_color=text_color_input, font=bottom_label_font)
+        save_question_label.grid(row=0, column=0, pady=(50, 40))
+
+        save_button_yes = CTkButton(save_buttons_frame_questions_window, width=80, text="Áno",
+                                    text_color=text_color_input, fg_color=button_color, font=bottom_label_font,
+                                    command=close_app_save_table)
+        save_button_yes.grid(row=1, column=0, padx=10)
+
+        save_button_no = CTkButton(save_buttons_frame_questions_window, width=80, text="Nie",
+                                   text_color=text_color_input, fg_color=button_color, font=bottom_label_font,
+                                   command=close_save_questions_window_and_continue)
+        save_button_no.grid(row=1, column=1, padx=10)
+
+    # close app clicked button yes
+    def close_app():
+        questions_window.destroy()
+        window.destroy()
+
+    questions_window = CTkToplevel(window)
+    questions_window.geometry("400x250+530+280")
+    questions_window.iconbitmap("icon.ico")
+    questions_window.title("Ukončenie aplikácie")
+    questions_window.grab_set()
+
+    question_frame = CTkFrame(questions_window, fg_color="transparent")
+    question_frame.pack()
+
+    buttons_frame_questions_window = CTkFrame(questions_window, fg_color="transparent")
+    buttons_frame_questions_window.pack()
+
+    question_label = CTkLabel(question_frame, width=300, text="Naozaj chcete ukončiť aplikáciu?",
+                              text_color=text_color_input, font=bottom_label_font)
+    question_label.grid(row=0, column=0, pady=(50, 40))
+
+    button_yes = CTkButton(buttons_frame_questions_window, width=80, text="Áno", text_color=text_color_input,
+                           fg_color=button_color, font=bottom_label_font, command=close_app)
+    button_yes.grid(row=1, column=0, padx=10)
+
+    button_no = CTkButton(buttons_frame_questions_window, width=80, text="Nie", text_color=text_color_input,
+                          fg_color=button_color, font=bottom_label_font, command=event_save_table)
+    button_no.grid(row=1, column=1, padx=10)
+
+
 window = CTk()
-window.geometry("1360x732+100+100")
+window.geometry("1360x732+10+10")
 window.title("Velušovské vajíčko 1.0")
 window.iconbitmap("icon.ico")
 window.resizable(False, False)
@@ -1241,5 +1314,6 @@ open_choosed_file()
 # check_all_existing_files()
 # update_monthly_profit_losses()
 # get_bar_values()
+window.protocol("WM_DELETE_WINDOW", event_close_main_window)
 
 window.mainloop()
