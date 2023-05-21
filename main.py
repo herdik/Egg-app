@@ -112,10 +112,14 @@ def add_items_press_button_add_item():
         table.insert(parent="", index=END, iid=f"{id_item}", text="", values=(f"{table_date}", f"{table_item}",
                                                                               f"{table_price}"), tags=("plus",))
     input_price.delete(0, END)
+    hidden_label_input_price.configure(text="Zadaj cenu")
+    hidden_label_input_price.grid_configure(row=0, column=2)
+    input_price.bind('<KeyRelease>', lambda e: delete_placeholder())
+    hidden_label_input_price.bind('<Button-1>', lambda e: input_price.focus())
     # input_item.insert(0, "Zadaj názov položky")
     # input_item.configure(text_color=temporary_input_font_color)
-    input_price.insert(0, "Zadaj cenu")
-    input_price.configure(text_color=temporary_input_font_color)
+    # input_price.insert(0, "Zadaj cenu")
+    # input_price.configure(text_color=temporary_input_font_color)
     current_month_label.focus()
     # input_date.delete(0, END)
     # input_date.set_date(date(int(drop_down_year.get()), current_date_numbers_for_input_date()[1],
