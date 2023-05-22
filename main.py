@@ -592,22 +592,25 @@ def window_settings():
 
 
 def pie_graph_call(profit_graph, losses_graph):
+    year_annual_turnover = np.array([profit_graph, losses_graph])
+    my_labels = [f"Príjmy", f"Výdavky"]
+    fig = Figure((5, 3.5), dpi=80)
+    fig.subplots_adjust(right=0.68)
+    canvas = FigureCanvasTkAgg(fig, graphics_frame)
+    canvas.get_tk_widget().grid(row=0, column=2)
+    no_data_label = CTkLabel(graphics_frame, text="", font=info_font, width=200, text_color="#fff", fg_color="#d00")
+    no_data_label.grid(row=0, column=2)
+
     if profit_graph == 0 and losses_graph == 0:
-        no_data_label = CTkLabel(graphics_frame, text="Žiadne dáta pre zobrazenie grafu", font=info_font)
-        no_data_label.grid(row=0, column=2, padx=(30, 30))
+        no_data_label.configure(text="Žiadne dáta pre zobrazenie grafu")
     else:
-        year_annual_turnover = np.array([profit_graph, losses_graph])
-        my_labels = [f"Príjmy", f"Výdavky"]
+        no_data_label.grid_remove()
+        legend_labels = [f"Príjmy {profit_graph}", f"Výdavky -{losses_graph}"]
         if losses_graph == 0:
             legend_labels = [f"Príjmy {profit_graph}", f"Výdavky {losses_graph}"]
-        else:
-            legend_labels = [f"Príjmy {profit_graph}", f"Výdavky -{losses_graph}"]
+
         my_colors = ["#218727", "#d00"]
         my_explode = [0.1, 0]
-
-        fig = Figure((5, 3.5), dpi=80)
-        # fig_2.set_size_inches(4, 2.75)
-        fig.subplots_adjust(right=0.68)
 
         ax = fig.add_subplot(111)
         _, _, autopcts = ax.pie(year_annual_turnover, labels=my_labels, colors=my_colors, explode=my_explode,
@@ -616,13 +619,8 @@ def pie_graph_call(profit_graph, losses_graph):
         for autopct in autopcts:
             autopct.set_color('white')
 
-        # plt.setp(autopcts, **{'color': 'white', 'weight': 'bold', 'fontsize': 9}) need:import matplotlib.pyplot as plt
-
         ax.legend(title="Celkový ročný obrat", labels=legend_labels, loc="center left", bbox_to_anchor=(1.02, 1.02),
                   prop={"size": 8, 'weight': 'bold'}, title_fontproperties={'weight': 'bold', "size": 9})
-
-        canvas = FigureCanvasTkAgg(fig, graphics_frame)
-        canvas.get_tk_widget().grid(row=0, column=2)
 
 
 # def change_date_or_add_zero_to_date(check_text):
