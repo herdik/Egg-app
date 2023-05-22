@@ -150,24 +150,24 @@ def clear_table():
 
 
 def save_file_fun():
-    empty_table = table.get_children()
-    if len(empty_table) == 0:
-        pass
-    else:
-        with open(f"{drop_down_month.get().lower() + str(drop_down_year.get())}.txt", mode="w") as file:
-            my_items = table.get_children()
-            for one_item in my_items:
-                first_item = str(table.item(one_item)["values"][0])
-                second_item = str(table.item(one_item)["values"][1])
-                third_item = str(table.item(one_item)["values"][2])
-                if first_item.endswith("\n") or second_item.endswith("\n") or third_item.endswith("\n"):
-                    file.write(first_item)
-                    file.write(second_item)
-                    file.write(third_item)
-                else:
-                    file.write(first_item + "\n")
-                    file.write(second_item + "\n")
-                    file.write(third_item + "\n")
+    # empty_table = table.get_children()
+    # if len(empty_table) == 0:
+    #     pass
+    # else:
+    with open(f"{drop_down_month.get().lower() + str(drop_down_year.get())}.txt", mode="w") as file:
+        my_items = table.get_children()
+        for one_item in my_items:
+            first_item = str(table.item(one_item)["values"][0])
+            second_item = str(table.item(one_item)["values"][1])
+            third_item = str(table.item(one_item)["values"][2])
+            if first_item.endswith("\n") or second_item.endswith("\n") or third_item.endswith("\n"):
+                file.write(first_item)
+                file.write(second_item)
+                file.write(third_item)
+            else:
+                file.write(first_item + "\n")
+                file.write(second_item + "\n")
+                file.write(third_item + "\n")
 
 
 # def reopen_saved_file():
@@ -593,8 +593,8 @@ def window_settings():
 
 def pie_graph_call(profit_graph, losses_graph):
     if profit_graph == 0 and losses_graph == 0:
-        no_data_label = CTkLabel(graphics_frame, text="Žiadne dáta pre zobrazenie grafu", font=main_font)
-        no_data_label.grid(row=0, column=2, padx=(0, 15))
+        no_data_label = CTkLabel(graphics_frame, text="Žiadne dáta pre zobrazenie grafu", font=info_font)
+        no_data_label.grid(row=0, column=2, padx=(30, 30))
     else:
         year_annual_turnover = np.array([profit_graph, losses_graph])
         my_labels = [f"Príjmy", f"Výdavky"]
@@ -1081,6 +1081,7 @@ text_color_input = "#b3b3b3"
 temporary_input_font_color = "#525959"
 
 main_font = ("Century Gothic", 24)
+info_font = ("Century Gothic", 20)
 bottom_label_font = ("Century Gothic", 16)
 input_font = ("Century Gothic", 14)
 
